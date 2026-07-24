@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ইসলাম উইভিং ফ্যাক্টরি — হিসাব খাতা</title>
+<title>ইসলাম উইভিং ফ্যাক্টরি — এক্সিকিউটিভ হিসাব খাতা</title>
 <link rel="manifest" href="manifest.json" />
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,26 +15,28 @@
     theme: {
       extend: {
         colors: {
-          corp: {
-            950: '#070f1e', // Deep Corporate Navy
-            900: '#0a192f',
-            800: '#112240',
-            700: '#1d3557',
-            500: '#1d4ed8', // Royal Blue Accent
-            100: '#e0e7ff',
+          brand: {
+            950: '#030712',
+            900: '#0b1329', // Executive Navy
+            800: '#111c3a',
+            700: '#1e293b',
+            600: '#2563eb', // Royal Blue Primary
+            500: '#3b82f6',
+            100: '#dbeafe',
             50: '#f8fafc',
           },
-          gold: {
+          luxuryGold: {
+            600: '#b45309',
             500: '#d97706',
             400: '#f59e0b',
             50: '#fffbeb',
           },
-          fintechGreen: {
+          finGreen: {
             600: '#059669',
             500: '#10b981',
             50: '#ecfdf5',
           },
-          fintechRed: {
+          finRed: {
             600: '#dc2626',
             500: '#ef4444',
             50: '#fef2f2',
@@ -59,19 +61,19 @@
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 20px;
-    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 8px 10px -6px rgba(15, 23, 42, 0.02);
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.03), 0 8px 10px -6px rgba(15, 23, 42, 0.02);
   }
-  .fintech-glass {
-    background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
-    box-shadow: 0 20px 25px -5px rgba(10, 25, 47, 0.25);
+  .fintech-hero {
+    background: linear-gradient(135deg, #0b1329 0%, #111c3a 60%, #1e293b 100%);
+    box-shadow: 0 20px 25px -5px rgba(11, 19, 41, 0.3);
   }
   .nav-tab {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .nav-tab.active {
     background: #ffffff;
-    color: #0a192f;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    color: #0b1329;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     font-weight: 700;
   }
   .input-field {
@@ -83,37 +85,37 @@
   }
   .input-field:focus {
     background-color: #ffffff;
-    border-color: #1d4ed8;
-    box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.12);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
     outline: none;
   }
 </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans">
 
-<!-- Top Header -->
-<header class="bg-corp-900 text-white border-b border-corp-800 sticky top-0 z-50 shadow-md">
+<!-- Corporate Top Header -->
+<header class="bg-brand-900 text-white border-b border-brand-800 sticky top-0 z-50 shadow-lg">
   <div class="max-w-5xl mx-auto px-4 py-3.5 flex justify-between items-center">
     <div class="flex items-center gap-3.5">
-      <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-extrabold text-lg text-white shadow-lg shadow-blue-500/30 border border-white/10">
+      <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-amber-500 flex items-center justify-center font-black text-lg text-white shadow-md border border-white/20">
         IW
       </div>
       <div>
-        <div class="text-[9px] tracking-[0.2em] text-blue-400 font-extrabold uppercase">Nuhanat Venture</div>
+        <div class="text-[9px] tracking-[0.2em] text-amber-400 font-extrabold uppercase">Islam Weaving Enterprise</div>
         <h1 class="font-serif text-lg sm:text-xl text-slate-50 font-bold leading-tight" id="hdrTitle"></h1>
         <p class="text-[11px] text-slate-400 font-medium" id="hdrSubtitle"></p>
       </div>
     </div>
     
-    <button id="syncBtn" onclick="fetchFromSheet()" class="bg-corp-800 hover:bg-corp-700 text-slate-200 border border-slate-700/60 rounded-full px-4 py-2 text-xs font-semibold transition flex items-center gap-2 shadow-inner">
+    <button id="syncBtn" onclick="fetchFromSheet()" class="bg-brand-800 hover:bg-brand-700 text-slate-200 border border-slate-700/80 rounded-full px-4 py-2 text-xs font-semibold transition flex items-center gap-2 shadow-inner">
       <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
       <span id="syncLabel"></span>
     </button>
   </div>
 </header>
 
-<!-- Navigation -->
-<div class="bg-corp-950/95 backdrop-blur-md border-b border-slate-800/80 sticky top-[69px] z-40">
+<!-- Navigation Bar -->
+<div class="bg-brand-950/95 backdrop-blur-md border-b border-slate-800 sticky top-[69px] z-40">
   <nav class="max-w-5xl mx-auto px-4 py-2 flex gap-1.5 overflow-x-auto no-scrollbar">
     <button class="nav-tab text-slate-400 hover:text-slate-100 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap active" data-tab="dashboard"></button>
     <button class="nav-tab text-slate-400 hover:text-slate-100 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap" data-tab="production"></button>
@@ -123,7 +125,7 @@
   </nav>
 </div>
 
-<!-- Main Content Area -->
+<!-- Main Body Area -->
 <main class="max-w-5xl mx-auto px-4 py-6 flex-1 w-full">
   <div class="panel block" id="panel-dashboard"></div>
   <div class="panel hidden" id="panel-production"></div>
@@ -136,54 +138,54 @@
 const I18N = {
   bn: {
     title: 'ইসলাম উইভিং ফ্যাক্টরি',
-    subtitle: 'Raiganj, Sirajganj — প্রোডাকশন ও লাভ ট্র্যাকার',
+    subtitle: 'রায়গঞ্জ, সিরাজগঞ্জ — প্রোডাকশন ও ফাইনান্স ড্যাশবোর্ড',
     tabDashboard: 'সারাংশ', tabProduction: 'প্রোডাকশন', tabSingeing: 'সিঙ্গিং', tabLifetime: 'লাইফটাইম', tabSettings: 'সেটিংস',
-    syncNoUrl: 'শীট লিংক সেট করুন', syncSyncing: 'সিঙ্ক হচ্ছে...', syncOk: 'সিঙ্ক আছে', syncError: 'সিঙ্ক ব্যর্থ',
-    emptyNotice: 'শীটের সাথে এখনো সিঙ্ক হয়নি। "সেটিংস" ট্যাবে গিয়ে Apps Script লিংক বসান।',
-    prodCardTitle: 'প্রোডাকশন প্রফিট — এই মাস', tag24_4_2: '২৪ / ৪ / ২ মেশিন',
+    syncNoUrl: 'শীট লিংক সেট করুন', syncSyncing: 'সিঙ্ক হচ্ছে...', syncOk: 'অনলাইন সিঙ্কড', syncError: 'সিঙ্ক ব্যর্থ',
+    emptyNotice: 'শীটের সাথে এখনো সিঙ্ক হয়নি। "সেটিংস" ট্যাবে গিয়ে Google Apps Script লিংকটি দিন।',
+    prodCardTitle: 'প্রোডাকশন প্রফিট — চলতি মাস', tag24_4_2: '২৪ / ৪ / ২ মেশিন',
     label24: '২৪ মেশিন (ফ্যাক্টরি টোটাল)', label4: '৪ মেশিন (আমার ভাগ)', label2: '২ মেশিন',
-    overallTitle: 'সামগ্রিক আয় ও লাভ-ক্ষতি', tagCombined: 'কম্বাইন্ড ব্যালেন্স',
-    labelSingeingIncome: 'সিঙ্গিং ইনকাম (এই মাস)', labelCombinedIncome: 'কম্বাইন্ড ইনকাম (৪+২+সিঙ্গিং)',
-    labelYearPL: (y) => y + ' সালের লাভ/ক্ষতি', labelLifetimePL: 'লাইফটাইম লাভ/ক্ষতি',
-    assumpTitle: 'ব্যবসার বর্তমান প্যারামিটার',
-    assumpDesc: 'মার্কেট রেট, মেশিন সংখ্যা বা সিঙ্গিং রেট বদলালে এখান থেকেই আপডেট করুন — সব হিসাব অটো রিক্যালকুলেট হবে।',
+    overallTitle: 'সামগ্রিক আয় ও লাভ-ক্ষতি বিবরণী', tagCombined: 'কম্বাইন্ড ব্যালেন্স',
+    labelSingeingIncome: 'সিঙ্গিং ইনকাম (চলতি মাস)', labelCombinedIncome: 'কম্বাইন্ড ইনকাম (৪+২+সিঙ্গিং)',
+    labelYearPL: (y) => y + ' সালের লাভ/ক্ষতি', labelLifetimePL: 'লাইফটাইম নেট প্রফিট',
+    assumpTitle: 'ব্যবসার মূল প্যারামিটারসমূহ',
+    assumpDesc: 'মার্কেট রেট, মেশিন সংখ্যা বা সিঙ্গিং রেট বদলালে এখান থেকে সেভ করুন — সব হিসাব রিক্যালকুলেট হবে।',
     assumpMarket: 'মার্কেট রেট (৳/থান)', assumpMachines: 'মোট মেশিন', assumpSingeing: 'সিঙ্গিং রেট (৳/থান)',
     btnSaveAssump: 'প্যারামিটার সেভ করুন',
     weekLabel: (n) => 'সপ্তাহ ' + n,
     datePlaceholder: 'তারিখ (যেমন 9.7.26)', piecesPlaceholder: 'মোট পিস',
     statThaan: 'থান:', statTotalProfit: 'টোটাল প্রফিট:', statMyProfit: 'আমার প্রফিট:', stat2Machine: '২ মেশিন:', statCombined: 'কম্বাইন্ড:',
     btnSaveSheet: 'শীটে সেভ করুন',
-    payLabel: 'পে:', singedPlaceholder: 'সিঙড থান', btnSave: 'সেভ',
-    curEntryTitle: (m, y) => m + ' ' + y + ' — এই মাসের হিসাব', tagCurMonth: 'চলতি মাস',
+    payLabel: 'বিল:', singedPlaceholder: 'সিঙড থান', btnSave: 'সেভ',
+    curEntryTitle: (m, y) => m + ' ' + y + ' — এই মাসের স্টেটমেন্ট', tagCurMonth: 'চলতি মাস',
     labelInvestment: 'ইনভেস্টমেন্ট (৳)', labelMonthlyIncome: 'মান্থলি ইনকাম (৳)',
-    statYearCum: 'এ বছর কিউমুলেティブ:', statYearPL: 'এ বছর লাভ/ক্ষতি:', statLifetimePL: 'লাইফটাইম লাভ/ক্ষতি:',
+    statYearCum: 'এ বছর কিউমুলেটিভ:', statYearPL: 'এ বছর লাভ/ক্ষতি:', statLifetimePL: 'লাইফটাইম লাভ/ক্ষতি:',
     notFoundMonth: (m, y) => m + ' ' + y + ' শীটে খুঁজে পাওয়া যায়নি।',
     yearTableTitle: (y) => y + ' সালের মাসভিত্তিক বিবরণী', tagViewOnly: 'ভিউ অনলি',
     colMonth: 'মাস', colInvest: 'ইনভেস্ট', colIncome: 'ইনকাম', colPL: 'লাভ/ক্ষতি',
     yearlySummaryTitle: 'বছরভিত্তিক লাইফটাইম সামারি', tagRange: '২০২৬–২০৫০',
     colYear: 'বছর', colTotalInvest: 'মোট ইনভেস্ট', colTotalIncome: 'মোট ইনকাম', colLifetimePL: 'লাইফটাইম লাভ/ক্ষতি',
     settingsTitle: 'Google Sheet সিঙ্ক সেটিংস',
-    settingsDesc: 'Apps Script ডিপ্লয় করার পর প্রাপ্ত ওয়েব অ্যাপ লিংকটি নিচে প্রদান করুন।',
+    settingsDesc: 'Apps Script ডিপ্লয় করার পর প্রাপ্ত ওয়েব অ্যাপ লিংকটি নিচে বসান।',
     urlPlaceholder: 'https://script.google.com/macros/s/.../exec',
-    btnSaveSettings: 'সেভ করুন',
-    syncMsgOk: '✓ সিঙ্ক সফল হয়েছে', syncMsgError: '✗ সিঙ্ক ব্যর্থ — লিংক ও শেয়ারিং সেটিংস চেক করুন',
+    btnSaveSettings: 'লিংক সেভ করুন',
+    syncMsgOk: '✓ সিঙ্ক সফল হয়েছে', syncMsgError: '✗ সিঙ্ক ব্যর্থ — লিংক ও শেয়ারিং সেটিংস পরীক্ষা করুন',
     syncMsgNoUrl: 'লিংক এখনো বসানো হয়নি', syncMsgSyncing: 'সিঙ্ক হচ্ছে...',
-    languageTitle: 'ভাষা পরিবর্তন (Language)', languageDesc: 'অ্যাপের ইন্টারফেস ভাষা নির্বাচন করুন।',
+    languageTitle: 'ভাষা নির্বাচন (Language)', languageDesc: 'আপনার পছন্দের ভাষা বেছে নিন।',
     langBangla: 'বাংলা', langEnglish: 'English',
   },
   en: {
     title: 'Islam Weaving Factory',
-    subtitle: 'Raiganj, Sirajganj — Production & Profit Tracker',
+    subtitle: 'Raiganj, Sirajganj — Production & Finance Dashboard',
     tabDashboard: 'Summary', tabProduction: 'Production', tabSingeing: 'Singeing', tabLifetime: 'Lifetime', tabSettings: 'Settings',
-    syncNoUrl: 'Set sheet link', syncSyncing: 'Syncing...', syncOk: 'Synced', syncError: 'Sync failed',
-    emptyNotice: 'Not synced with the sheet yet. Go to "Settings" and add the Apps Script link.',
-    prodCardTitle: 'Production Profit — This Month', tag24_4_2: '24 / 4 / 2 Machines',
+    syncNoUrl: 'Set sheet link', syncSyncing: 'Syncing...', syncOk: 'Online Synced', syncError: 'Sync failed',
+    emptyNotice: 'Not synced with the sheet yet. Go to "Settings" and enter the Apps Script link.',
+    prodCardTitle: 'Production Profit — Current Month', tag24_4_2: '24 / 4 / 2 Machines',
     label24: '24 Machines (Factory Total)', label4: '4 Machines (My Share)', label2: '2 Machines',
-    overallTitle: 'Overall Income & Profit/Loss', tagCombined: 'Combined Balance',
+    overallTitle: 'Overall Financial Statement', tagCombined: 'Combined Balance',
     labelSingeingIncome: 'Singeing Income (This Month)', labelCombinedIncome: 'Combined Income (4+2+Singeing)',
-    labelYearPL: (y) => y + ' Profit/Loss', labelLifetimePL: 'Lifetime Profit/Loss',
-    assumpTitle: 'Business Parameters',
-    assumpDesc: 'Change market rate, machine count, or singeing rate here — everything recalculates automatically.',
+    labelYearPL: (y) => y + ' Profit/Loss', labelLifetimePL: 'Lifetime Net Profit',
+    assumpTitle: 'Core Business Parameters',
+    assumpDesc: 'Update market rate, machine count, or singeing rate here — all data will recalculate automatically.',
     assumpMarket: 'Market Rate (৳/Thaan)', assumpMachines: 'Total Machines', assumpSingeing: 'Singeing Rate (৳/Thaan)',
     btnSaveAssump: 'Save Parameters',
     weekLabel: (n) => 'Week ' + n,
@@ -191,7 +193,7 @@ const I18N = {
     statThaan: 'Thaan:', statTotalProfit: 'Total Profit:', statMyProfit: 'My Profit:', stat2Machine: '2 Machines:', statCombined: 'Combined:',
     btnSaveSheet: 'Save to Sheet',
     payLabel: 'Pay:', singedPlaceholder: 'Singed Thaan', btnSave: 'Save',
-    curEntryTitle: (m, y) => m + " " + y + " — This Month's Statement", tagCurMonth: 'Current Month',
+    curEntryTitle: (m, y) => m + " " + y + " — Monthly Statement", tagCurMonth: 'Current Month',
     labelInvestment: 'Investment (৳)', labelMonthlyIncome: 'Monthly Income (৳)',
     statYearCum: 'This Year Cumulative:', statYearPL: 'This Year P/L:', statLifetimePL: 'Lifetime P/L:',
     notFoundMonth: (m, y) => m + ' ' + y + ' not found in the sheet.',
@@ -200,12 +202,12 @@ const I18N = {
     yearlySummaryTitle: 'Yearly Lifetime Summary', tagRange: '2026–2050',
     colYear: 'Year', colTotalInvest: 'Total Invest', colTotalIncome: 'Total Income', colLifetimePL: 'Lifetime P/L',
     settingsTitle: 'Google Sheet Sync Settings',
-    settingsDesc: 'After deploying Apps Script, paste the web app URL below.',
+    settingsDesc: 'Enter your deployed Google Apps Script URL below.',
     urlPlaceholder: 'https://script.google.com/macros/s/.../exec',
-    btnSaveSettings: 'Save',
-    syncMsgOk: '✓ Sync successful', syncMsgError: '✗ Sync failed — check the link and sharing settings',
-    syncMsgNoUrl: 'Link not set yet', syncMsgSyncing: 'Syncing...',
-    languageTitle: 'Language Selection', languageDesc: 'Choose your preferred app interface language.',
+    btnSaveSettings: 'Save Link',
+    syncMsgOk: '✓ Sync successful', syncMsgError: '✗ Sync failed — check URL and permissions',
+    syncMsgNoUrl: 'Link not configured', syncMsgSyncing: 'Syncing...',
+    languageTitle: 'Language Selection', languageDesc: 'Choose interface language.',
     langBangla: 'বাংলা', langEnglish: 'English',
   }
 };
@@ -293,13 +295,13 @@ function renderAll() {
 }
 
 function emptyNotice() {
-  return `<div class="corp-card p-10 text-center text-slate-500 font-semibold text-sm my-6 border-dashed border-2">${t('emptyNotice')}</div>`;
+  return `<div class="corp-card p-12 text-center text-slate-500 font-semibold text-sm my-6 border-dashed border-2">${t('emptyNotice')}</div>`;
 }
 
 function plMarkup(v) {
   const n = Number(v) || 0;
   const isPos = n >= 0;
-  const colorClass = isPos ? 'text-fintechGreen-600' : 'text-fintechRed-600';
+  const colorClass = isPos ? 'text-finGreen-600' : 'text-finRed-600';
   const bgBadge = isPos ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200';
   return `<div class="inline-flex items-center gap-1.5 font-extrabold ${colorClass} px-3 py-1 rounded-full text-sm border ${bgBadge}">
             <span class="inline-block w-2 h-2 rounded-full ${isPos ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
@@ -326,25 +328,23 @@ function renderDashboard() {
   el.innerHTML = `
     <div class="space-y-6">
       <!-- Section 1: Hero Fintech Card -->
-      <div class="fintech-glass text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-slate-700/50">
-        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-blue-500/10 rounded-full blur-2xl pointer-events-none"></div>
-        
+      <div class="fintech-hero text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-slate-700/60">
         <div class="flex justify-between items-center mb-6 border-b border-slate-700/60 pb-4">
           <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')}</h2>
-          <span class="text-[10px] font-extrabold tracking-widest text-blue-300 bg-blue-900/60 border border-blue-400/30 px-3 py-1 rounded-full uppercase">${t('tag24_4_2')}</span>
+          <span class="text-[10px] font-extrabold tracking-widest text-amber-300 bg-amber-950/80 border border-amber-500/40 px-3 py-1 rounded-full uppercase">${t('tag24_4_2')}</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-corp-800/60 backdrop-blur border border-slate-700/50 p-5 rounded-2xl">
+          <div class="bg-brand-900/80 backdrop-blur border border-slate-700/70 p-5 rounded-2xl">
             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">${t('label24')}</div>
             <div class="text-2xl font-black text-slate-100 tracking-tight">${fmtBDT(p24)}</div>
           </div>
-          <div class="bg-emerald-950/40 backdrop-blur border border-emerald-500/30 p-5 rounded-2xl relative">
+          <div class="bg-emerald-950/40 backdrop-blur border border-emerald-500/40 p-5 rounded-2xl relative">
             <div class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider mb-1">${t('label4')}</div>
             <div class="text-2xl font-black text-emerald-300 tracking-tight">${fmtBDT(p4)}</div>
-            <span class="absolute top-3 right-3 text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-extrabold">MY SHARE</span>
+            <span class="absolute top-3 right-3 text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded font-extrabold">MY SHARE</span>
           </div>
-          <div class="bg-corp-800/60 backdrop-blur border border-slate-700/50 p-5 rounded-2xl">
+          <div class="bg-brand-900/80 backdrop-blur border border-slate-700/70 p-5 rounded-2xl">
             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">${t('label2')}</div>
             <div class="text-2xl font-black text-slate-100 tracking-tight">${fmtBDT(p2)}</div>
           </div>
@@ -354,17 +354,17 @@ function renderDashboard() {
       <!-- Section 2: Combined Statements -->
       <div class="corp-card overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/80">
-          <h2 class="font-bold text-corp-900 text-base tracking-tight">${t('overallTitle')}</h2>
-          <span class="text-[10px] font-extrabold tracking-wider text-amber-700 bg-gold-50 border border-amber-200 px-3 py-1 rounded-full uppercase">${t('tagCombined')}</span>
+          <h2 class="font-bold text-brand-900 text-base tracking-tight">${t('overallTitle')}</h2>
+          <span class="text-[10px] font-extrabold tracking-wider text-amber-800 bg-luxuryGold-50 border border-amber-200 px-3 py-1 rounded-full uppercase">${t('tagCombined')}</span>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
           <div class="p-6">
             <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">${t('labelSingeingIncome')}</div>
-            <div class="text-xl font-black text-amber-600">${fmtBDT(singeingIncome)}</div>
+            <div class="text-xl font-black text-luxuryGold-500">${fmtBDT(singeingIncome)}</div>
           </div>
           <div class="p-6">
             <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">${t('labelCombinedIncome')}</div>
-            <div class="text-xl font-black text-emerald-600">${fmtBDT(combined)}</div>
+            <div class="text-xl font-black text-finGreen-600">${fmtBDT(combined)}</div>
           </div>
           <div class="p-6">
             <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">${t('labelYearPL', yearLabel)}</div>
@@ -378,26 +378,26 @@ function renderDashboard() {
       </div>
 
       <!-- Section 3: Business Assumptions -->
-      <div class="corp-card p-6 border-l-4 border-l-corp-500">
+      <div class="corp-card p-6 border-l-4 border-l-brand-600">
         <div class="flex items-center gap-2 mb-1">
-          <h3 class="font-bold text-corp-900 text-base">${t('assumpTitle')}</h3>
+          <h3 class="font-bold text-brand-900 text-base">${t('assumpTitle')}</h3>
         </div>
         <p class="text-xs text-slate-500 mb-5 font-medium">${t('assumpDesc')}</p>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
           <div>
             <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">${t('assumpMarket')}</label>
-            <input class="input-field w-full text-sm font-bold text-corp-900" id="assump-market" type="number" value="${data.assumptions.marketRate}" />
+            <input class="input-field w-full text-sm font-bold text-brand-900" id="assump-market" type="number" value="${data.assumptions.marketRate}" />
           </div>
           <div>
             <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">${t('assumpMachines')}</label>
-            <input class="input-field w-full text-sm font-bold text-corp-900" id="assump-machines" type="number" value="${data.assumptions.totalMachines}" />
+            <input class="input-field w-full text-sm font-bold text-brand-900" id="assump-machines" type="number" value="${data.assumptions.totalMachines}" />
           </div>
           <div>
             <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">${t('assumpSingeing')}</label>
-            <input class="input-field w-full text-sm font-bold text-corp-900" id="assump-singeing" type="number" value="${data.assumptions.singeingRate}" />
+            <input class="input-field w-full text-sm font-bold text-brand-900" id="assump-singeing" type="number" value="${data.assumptions.singeingRate}" />
           </div>
         </div>
-        <button class="bg-corp-900 hover:bg-corp-800 active:scale-[0.99] text-white font-bold text-xs py-3 px-6 rounded-xl transition shadow-md shadow-corp-900/20" onclick="saveAssumptions()">${t('btnSaveAssump')}</button>
+        <button class="bg-brand-900 hover:bg-brand-800 active:scale-[0.99] text-white font-bold text-xs py-3 px-6 rounded-xl transition shadow-md" onclick="saveAssumptions()">${t('btnSaveAssump')}</button>
       </div>
     </div>`;
 }
@@ -413,10 +413,10 @@ function renderProduction() {
   const el = document.getElementById('panel-production');
   if (!data) { el.innerHTML = emptyNotice(); return; }
   el.innerHTML = `<div class="space-y-4">` + data.weeks.map((w, i) => `
-    <div class="corp-card p-6 border-l-4 border-l-corp-900 hover:border-l-corp-500 transition">
+    <div class="corp-card p-6 border-l-4 border-l-brand-900 hover:border-l-brand-600 transition">
       <div class="flex justify-between items-center mb-4">
-        <div class="font-bold text-corp-900 text-base">${t('weekLabel', w.week)}</div>
-        <span class="text-[10px] font-extrabold uppercase bg-slate-100 text-slate-600 px-3 py-1 rounded-md">WEEKLY ENTRY</span>
+        <div class="font-bold text-brand-900 text-base">${t('weekLabel', w.week)}</div>
+        <span class="text-[10px] font-extrabold uppercase bg-slate-100 text-slate-600 px-3 py-1 rounded-md">WEEKLY LOG</span>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
@@ -429,13 +429,13 @@ function renderProduction() {
         </div>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs mb-5 bg-slate-50 p-4 rounded-xl border border-slate-100">
-        <div><span class="text-slate-400 block text-[10px] uppercase font-bold">${t('statThaan')}</span> <b class="text-corp-900 text-sm font-extrabold">${w.weeklyThaan}</b></div>
-        <div><span class="text-slate-400 block text-[10px] uppercase font-bold">${t('statTotalProfit')}</span> <b class="text-corp-900 text-sm font-extrabold">${fmtBDT(w.totalProfit)}</b></div>
-        <div><span class="text-slate-400 block text-[10px] uppercase font-bold">${t('statMyProfit')}</span> <b class="text-emerald-600 text-sm font-extrabold">${fmtBDT(w.myProfit)}</b></div>
-        <div><span class="text-slate-400 block text-[10px] uppercase font-bold">${t('stat2Machine')}</span> <b class="text-corp-900 text-sm font-extrabold">${fmtBDT(w.twoMachineProfit)}</b></div>
-        <div><span class="text-slate-400 block text-[10px] uppercase font-bold">${t('statCombined')}</span> <b class="text-emerald-600 text-sm font-extrabold">${fmtBDT(w.combinedProfit)}</b></div>
+        <div><span class="text-slate-400 block text-[10px] uppercase font-bold">${t('statThaan')}</span> <b class="text-brand-900 text-sm font-extrabold">${w.weeklyThaan}</b></div>
+        <div><span class="text-slate-400 block text-[10px] uppercase font-bold">${t('statTotalProfit')}</span> <b class="text-brand-900 text-sm font-extrabold">${fmtBDT(w.totalProfit)}</b></div>
+        <div><span class="text-slate-400 block text-[10px] uppercase font-bold">${t('statMyProfit')}</span> <b class="text-finGreen-600 text-sm font-extrabold">${fmtBDT(w.myProfit)}</b></div>
+        <div><span class="text-slate-400 block text-[10px] uppercase font-bold">${t('stat2Machine')}</span> <b class="text-brand-900 text-sm font-extrabold">${fmtBDT(w.twoMachineProfit)}</b></div>
+        <div><span class="text-slate-400 block text-[10px] uppercase font-bold">${t('statCombined')}</span> <b class="text-finGreen-600 text-sm font-extrabold">${fmtBDT(w.combinedProfit)}</b></div>
       </div>
-      <button class="w-full bg-corp-900 hover:bg-corp-800 text-white font-bold text-xs py-3 rounded-xl transition shadow-md" onclick="saveWeek(${i})">${t('btnSaveSheet')}</button>
+      <button class="w-full bg-brand-900 hover:bg-brand-800 text-white font-bold text-xs py-3 rounded-xl transition shadow-md" onclick="saveWeek(${i})">${t('btnSaveSheet')}</button>
     </div>
   `).join('') + `</div>`;
 }
@@ -452,12 +452,12 @@ function renderSingeing() {
   el.innerHTML = `<div class="space-y-3">` + data.singeing.map((s, i) => `
     <div class="corp-card p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <div class="font-bold text-corp-900 text-base">${t('weekLabel', s.week)}</div>
-        <div class="text-xs text-slate-500 font-medium mt-0.5">${s.date} · ${t('payLabel')} <span class="font-extrabold text-corp-900">${fmtBDT(s.pay)}</span></div>
+        <div class="font-bold text-brand-900 text-base">${t('weekLabel', s.week)}</div>
+        <div class="text-xs text-slate-500 font-medium mt-0.5">${s.date} · ${t('payLabel')} <span class="font-extrabold text-brand-900">${fmtBDT(s.pay)}</span></div>
       </div>
       <div class="flex gap-3 w-full sm:w-auto">
         <input class="input-field text-sm font-bold w-full sm:w-36" id="sing-${i}" type="number" placeholder="${t('singedPlaceholder')}" value="${s.singedThaan || ''}" />
-        <button class="bg-corp-900 hover:bg-corp-800 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition whitespace-nowrap shadow-sm" onclick="saveSingeing(${i})">${t('btnSave')}</button>
+        <button class="bg-brand-900 hover:bg-brand-800 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition whitespace-nowrap shadow-sm" onclick="saveSingeing(${i})">${t('btnSave')}</button>
       </div>
     </div>
   `).join('') + `</div>`;
@@ -481,38 +481,38 @@ function renderLifetime() {
   const cur = curIndex >= 0 ? data.lifetime[curIndex] : null;
 
   const currentCardHtml = cur ? `
-    <div class="corp-card overflow-hidden mb-6 border-2 border-corp-500/20">
+    <div class="corp-card overflow-hidden mb-6 border-2 border-brand-600/20">
       <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/80">
-        <h2 class="font-bold text-corp-900 text-base">${t('curEntryTitle', cur.month, cur.year)}</h2>
-        <span class="text-[10px] font-extrabold tracking-wider text-emerald-700 bg-fintechGreen-50 border border-emerald-200 px-3 py-1 rounded-full uppercase">${t('tagCurMonth')}</span>
+        <h2 class="font-bold text-brand-900 text-base">${t('curEntryTitle', cur.month, cur.year)}</h2>
+        <span class="text-[10px] font-extrabold tracking-wider text-emerald-700 bg-finGreen-50 border border-emerald-200 px-3 py-1 rounded-full uppercase">${t('tagCurMonth')}</span>
       </div>
       <div class="p-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
           <div>
             <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">${t('labelInvestment')}</label>
-            <input class="input-field w-full text-sm font-bold text-corp-900" id="life-cur-inv" type="number" value="${cur.investment || ''}" />
+            <input class="input-field w-full text-sm font-bold text-brand-900" id="life-cur-inv" type="number" value="${cur.investment || ''}" />
           </div>
           <div>
             <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">${t('labelMonthlyIncome')}</label>
-            <input class="input-field w-full text-sm font-bold text-corp-900" id="life-cur-inc" type="number" value="${cur.monthlyIncome || ''}" />
+            <input class="input-field w-full text-sm font-bold text-brand-900" id="life-cur-inc" type="number" value="${cur.monthlyIncome || ''}" />
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-500 mb-5 bg-slate-50 p-4 rounded-xl border border-slate-100 font-medium">
-          <div>${t('statYearCum')} <b class="text-corp-900 block text-sm font-extrabold mt-0.5">${fmtBDT(cur.cumIncomeYear)}</b></div>
-          <div>${t('statYearPL')} <b class="${Number(cur.profitLossYear) >= 0 ? 'text-fintechGreen-600' : 'text-fintechRed-600'} block text-sm font-extrabold mt-0.5">${fmtBDT(cur.profitLossYear)}</b></div>
-          <div>${t('statLifetimePL')} <b class="${Number(cur.profitLossLifetime) >= 0 ? 'text-fintechGreen-600' : 'text-fintechRed-600'} block text-sm font-extrabold mt-0.5">${fmtBDT(cur.profitLossLifetime)}</b></div>
+          <div>${t('statYearCum')} <b class="text-brand-900 block text-sm font-extrabold mt-0.5">${fmtBDT(cur.cumIncomeYear)}</b></div>
+          <div>${t('statYearPL')} <b class="${Number(cur.profitLossYear) >= 0 ? 'text-finGreen-600' : 'text-finRed-600'} block text-sm font-extrabold mt-0.5">${fmtBDT(cur.profitLossYear)}</b></div>
+          <div>${t('statLifetimePL')} <b class="${Number(cur.profitLossLifetime) >= 0 ? 'text-finGreen-600' : 'text-finRed-600'} block text-sm font-extrabold mt-0.5">${fmtBDT(cur.profitLossLifetime)}</b></div>
         </div>
-        <button class="w-full bg-corp-500 hover:bg-blue-700 text-white font-bold text-xs py-3 rounded-xl transition shadow-md shadow-blue-500/20" onclick="saveCurrentLifetime(${curIndex})">${t('btnSaveSheet')}</button>
+        <button class="w-full bg-brand-600 hover:bg-blue-700 text-white font-bold text-xs py-3 rounded-xl transition shadow-md shadow-blue-500/20" onclick="saveCurrentLifetime(${curIndex})">${t('btnSaveSheet')}</button>
       </div>
     </div>` : `<div class="corp-card p-6 text-center text-slate-500 text-sm mb-6">${t('notFoundMonth', curMonthName, curYear)}</div>`;
 
   const yearRows = data.lifetime.filter(r => Number(r.year) === curYear);
   const yearTableRows = yearRows.map(r => `
     <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-      <td class="py-3.5 px-4 font-bold text-corp-900">${r.month}</td>
+      <td class="py-3.5 px-4 font-bold text-brand-900">${r.month}</td>
       <td class="py-3.5 px-4 text-right text-slate-600 font-medium">${r.investment !== '' ? fmtBDT(r.investment) : '—'}</td>
       <td class="py-3.5 px-4 text-right text-slate-600 font-medium">${r.monthlyIncome !== '' ? fmtBDT(r.monthlyIncome) : '—'}</td>
-      <td class="py-3.5 px-4 text-right font-bold ${r.profitLossYear !== '' && Number(r.profitLossYear) >= 0 ? 'text-fintechGreen-600' : (r.profitLossYear !== '' ? 'text-fintechRed-600' : 'text-slate-400')}">${r.profitLossYear !== '' ? fmtBDT(r.profitLossYear) : '—'}</td>
+      <td class="py-3.5 px-4 text-right font-bold ${r.profitLossYear !== '' && Number(r.profitLossYear) >= 0 ? 'text-finGreen-600' : (r.profitLossYear !== '' ? 'text-finRed-600' : 'text-slate-400')}">${r.profitLossYear !== '' ? fmtBDT(r.profitLossYear) : '—'}</td>
     </tr>`).join('');
 
   const byYear = {};
@@ -520,10 +520,10 @@ function renderLifetime() {
   const yearlySummaryRows = Object.keys(byYear).sort().map(y => {
     const r = byYear[y];
     return `<tr class="hover:bg-slate-50 transition border-b border-slate-100">
-      <td class="py-3.5 px-4 font-bold text-corp-900">${y}</td>
+      <td class="py-3.5 px-4 font-bold text-brand-900">${y}</td>
       <td class="py-3.5 px-4 text-right text-slate-600 font-medium">${fmtBDT(r.cumInvestLifetime)}</td>
       <td class="py-3.5 px-4 text-right text-slate-600 font-medium">${fmtBDT(r.cumIncomeLifetime)}</td>
-      <td class="py-3.5 px-4 text-right font-bold ${Number(r.profitLossLifetime) >= 0 ? 'text-fintechGreen-600' : 'text-fintechRed-600'}">${fmtBDT(r.profitLossLifetime)}</td>
+      <td class="py-3.5 px-4 text-right font-bold ${Number(r.profitLossLifetime) >= 0 ? 'text-finGreen-600' : 'text-finRed-600'}">${fmtBDT(r.profitLossLifetime)}</td>
     </tr>`;
   }).join('');
 
@@ -531,7 +531,7 @@ function renderLifetime() {
     <div class="space-y-6">
       <div class="corp-card overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/80">
-          <h2 class="font-bold text-corp-900 text-sm tracking-wide uppercase">${t('yearTableTitle', curYear)}</h2>
+          <h2 class="font-bold text-brand-900 text-sm tracking-wide uppercase">${t('yearTableTitle', curYear)}</h2>
           <span class="text-[10px] font-extrabold tracking-wider text-slate-500 bg-slate-200/60 px-3 py-1 rounded-full uppercase">${t('tagViewOnly')}</span>
         </div>
         <div class="overflow-x-auto">
@@ -551,7 +551,7 @@ function renderLifetime() {
 
       <div class="corp-card overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/80">
-          <h2 class="font-bold text-corp-900 text-sm tracking-wide uppercase">${t('yearlySummaryTitle')}</h2>
+          <h2 class="font-bold text-brand-900 text-sm tracking-wide uppercase">${t('yearlySummaryTitle')}</h2>
           <span class="text-[10px] font-extrabold tracking-wider text-slate-500 bg-slate-200/60 px-3 py-1 rounded-full uppercase">${t('tagRange')}</span>
         </div>
         <div class="overflow-x-auto max-h-72">
@@ -582,27 +582,27 @@ async function saveCurrentLifetime(i) {
 function renderSettings() {
   const el = document.getElementById('panel-settings');
   const msgMap = {
-    'ok': '<span class="text-fintechGreen-600 font-bold flex items-center gap-1 mt-3 text-xs">' + t('syncMsgOk') + '</span>',
-    'error': '<span class="text-fintechRed-600 font-bold flex items-center gap-1 mt-3 text-xs">' + t('syncMsgError') + '</span>',
+    'ok': '<span class="text-finGreen-600 font-bold flex items-center gap-1 mt-3 text-xs">' + t('syncMsgOk') + '</span>',
+    'error': '<span class="text-finRed-600 font-bold flex items-center gap-1 mt-3 text-xs">' + t('syncMsgError') + '</span>',
     'no-url': '<span class="text-slate-400 flex items-center gap-1 mt-3 text-xs font-medium">' + t('syncMsgNoUrl') + '</span>',
-    'syncing': '<span class="text-gold-500 font-bold flex items-center gap-1 mt-3 text-xs animate-pulse">' + t('syncMsgSyncing') + '</span>',
+    'syncing': '<span class="text-luxuryGold-500 font-bold flex items-center gap-1 mt-3 text-xs animate-pulse">' + t('syncMsgSyncing') + '</span>',
   };
   el.innerHTML = `
     <div class="space-y-5 max-w-xl mx-auto">
       <div class="corp-card p-6">
-        <h3 class="font-bold text-corp-900 text-base mb-1">${t('languageTitle')}</h3>
+        <h3 class="font-bold text-brand-900 text-base mb-1">${t('languageTitle')}</h3>
         <p class="text-xs text-slate-500 mb-4 font-medium">${t('languageDesc')}</p>
         <div class="grid grid-cols-2 gap-3">
-          <button class="py-3 rounded-xl border text-xs font-extrabold transition ${lang === 'bn' ? 'border-corp-500 bg-blue-50/50 text-corp-500 shadow-sm' : 'border-slate-200 text-slate-600 hover:bg-slate-50'}" onclick="setLang('bn')">${t('langBangla')}</button>
-          <button class="py-3 rounded-xl border text-xs font-extrabold transition ${lang === 'en' ? 'border-corp-500 bg-blue-50/50 text-corp-500 shadow-sm' : 'border-slate-200 text-slate-600 hover:bg-slate-50'}" onclick="setLang('en')">${t('langEnglish')}</button>
+          <button class="py-3 rounded-xl border text-xs font-extrabold transition ${lang === 'bn' ? 'border-brand-600 bg-blue-50/50 text-brand-600 shadow-sm' : 'border-slate-200 text-slate-600 hover:bg-slate-50'}" onclick="setLang('bn')">${t('langBangla')}</button>
+          <button class="py-3 rounded-xl border text-xs font-extrabold transition ${lang === 'en' ? 'border-brand-600 bg-blue-50/50 text-brand-600 shadow-sm' : 'border-slate-200 text-slate-600 hover:bg-slate-50'}" onclick="setLang('en')">${t('langEnglish')}</button>
         </div>
       </div>
 
       <div class="corp-card p-6">
-        <h3 class="font-bold text-corp-900 text-base mb-1">${t('settingsTitle')}</h3>
+        <h3 class="font-bold text-brand-900 text-base mb-1">${t('settingsTitle')}</h3>
         <p class="text-xs text-slate-500 mb-4 font-medium">${t('settingsDesc')}</p>
         <input class="input-field w-full text-xs font-mono mb-4" id="urlInput" placeholder="${t('urlPlaceholder')}" value="${scriptUrl}" />
-        <button class="w-full bg-corp-900 hover:bg-corp-800 text-white font-bold text-xs py-3 rounded-xl transition shadow-md" onclick="saveUrl()">${t('btnSaveSettings')}</button>
+        <button class="w-full bg-brand-900 hover:bg-brand-800 text-white font-bold text-xs py-3 rounded-xl transition shadow-md" onclick="saveUrl()">${t('btnSaveSettings')}</button>
         <div id="syncMsg">${msgMap[syncStatus] || ''}</div>
       </div>
     </div>`;
