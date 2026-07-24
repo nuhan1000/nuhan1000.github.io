@@ -412,7 +412,7 @@ function renderDashboard() {
           <span class="text-[10px] font-extrabold tracking-widest text-amber-300 bg-amber-950/80 border border-amber-500/40 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tag24_4_2')}</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <div class="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl shadow-inner">
             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">${t('label24')}</div>
             <div class="text-2xl font-black text-slate-100 tracking-tight">${fmtBDT(p24)}</div>
@@ -425,6 +425,14 @@ function renderDashboard() {
           <div class="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl shadow-inner">
             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">${t('label2')}</div>
             <div class="text-2xl font-black text-slate-100 tracking-tight">${fmtBDT(p2)}</div>
+          </div>
+          <div class="bg-luxuryGold-400/10 backdrop-blur-md border border-luxuryGold-400/30 p-5 rounded-2xl shadow-inner">
+            <div class="text-[11px] font-bold text-luxuryGold-400 uppercase tracking-wider mb-1">${t('labelSingeingIncome')}</div>
+            <div class="text-2xl font-black text-luxuryGold-400 tracking-tight">${fmtBDT(singeingIncome)}</div>
+          </div>
+          <div class="bg-emerald-500/10 backdrop-blur-md border border-emerald-500/30 p-5 rounded-2xl shadow-inner">
+            <div class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider mb-1">${t('labelCombinedIncome')}</div>
+            <div class="text-2xl font-black text-emerald-300 tracking-tight">${fmtBDT(combined)}</div>
           </div>
         </div>
       </div>
