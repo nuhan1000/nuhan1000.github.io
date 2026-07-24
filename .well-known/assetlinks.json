@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.nuhan1000.twa",
+    "sha256_cert_fingerprints": ["35:51:02:70:4C:A8:06:10:62:8B:F9:A3:6A:B8:A1:EC:97:75:83:E6:03:54:D7:87:39:FB:4F:FA:88:82:F8:7D"]
+  }
+}]
