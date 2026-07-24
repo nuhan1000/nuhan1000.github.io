@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ইসলাম উইভিং ফ্যাক্টরি — হিসাব খাতা</title>
+<link rel="manifest" href="manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0F1B2E;
+    --ink-2: #16253D;
+    --ivory: #FAF7F0;
+    --panel: #FFFFFF;
+    --gold: #C6A15B;
+    --gold-soft: rgba(198,161,91,0.28);
+    --emerald: #1B6E4C;
+    --garnet: #9E2B25;
+    --slate: #6B7280;
+    --border: #E7E0D0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Hind Siliguri', sans-serif; background: var(--ivory); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  input, button { font-family: 'Hind Siliguri', sans-serif; }
+  input { outline: none; }
+  input:focus { outline: 2px solid var(--ink); outline-offset: 1px; }
+  button { -webkit-tap-highlight-color: transparent; }
+
+  header { background: linear-gradient(155deg, var(--ink) 0%, var(--ink-2) 100%); padding: 22px 16px 28px; position: relative; overflow: hidden; }
+  header::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(180deg, var(--gold), var(--garnet)); }
+  header::after { content: ""; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, var(--gold-soft), transparent 70%); }
+  .header-inner { max-width: 900px; margin: 0 auto; padding-left: 16px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; position: relative; z-index: 2; }
+  .eyebrow { font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 4px; }
+  .title { font-family: 'Tiro Bangla', serif; font-size: 25px; color: var(--ivory); letter-spacing: 0.2px; }
+  .subtitle { font-size: 12.5px; color: #9CA8BD; margin-top: 3px; }
+  #syncBtn { background: rgba(255,255,255,0.06); border: 1px solid var(--gold-soft); border-radius: 20px; padding: 7px 13px; display: flex; align-items: center; gap: 6px; font-size: 11px; cursor: pointer; color: #C9CFDB; letter-spacing: 0.02em; }
+
+  nav { max-width: 900px; margin: -14px auto 0; display: flex; gap: 4px; padding: 0 10px; position: relative; z-index: 2; flex-wrap: wrap; }
+  nav button { flex: 1 1 auto; min-width: 70px; padding: 11px 6px 9px; background: #EFE8D6; border: none; border-top: 3px solid transparent; border-radius: 8px 8px 0 0; cursor: pointer; font-size: 11.5px; font-weight: 500; color: #8a8371; letter-spacing: 0.01em; }
+  nav button.active { background: var(--ivory); border-top-color: var(--gold); font-weight: 700; color: var(--ink); }
+
+  main { max-width: 900px; margin: 0 auto; padding: 22px 16px 60px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .ledger-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 14px; box-shadow: 0 1px 2px rgba(15,27,46,0.04), 0 8px 24px -16px rgba(15,27,46,0.18); overflow: hidden; }
+  .ledger-head { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #FFFDF9, #FFFFFF); gap: 8px; }
+  .ledger-head .name { font-family: 'Tiro Bangla', serif; font-size: 14.5px; color: var(--ink); }
+  .ledger-head .tag { font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); font-weight: 700; border: 1px solid var(--gold-soft); padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
+  .ledger-row { display: grid; }
+  .ledger-cell { padding: 16px 14px; border-right: 1px solid var(--border); position: relative; }
+  .ledger-cell:last-child { border-right: none; }
+  .ledger-cell .clabel { font-size: 10px; letter-spacing: 0.06em; color: var(--slate); margin-bottom: 8px; text-transform: uppercase; }
+  .ledger-cell .cvalue { font-family: 'Hind Siliguri', sans-serif; font-size: 21px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .ledger-cell .cvalue.pos { color: var(--emerald); }
+  .ledger-cell .cvalue.neg { color: var(--garnet); }
+  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .dot.pos { background: var(--emerald); }
+  .dot.neg { background: var(--garnet); }
+  .r3 { grid-template-columns: 1fr 1fr 1fr; }
+  .r2x2 { grid-template-columns: 1fr 1fr; }
+  .r2x2 .ledger-cell:nth-child(2n) { border-right: none; }
+  .r2x2 .ledger-cell:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+
+  .assump-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: 0 1px 2px rgba(15,27,46,0.04); }
+  .assump-title { font-family: 'Tiro Bangla', serif; font-size: 15px; margin-bottom: 4px; }
+  .assump-desc { font-size: 11.5px; color: var(--slate); margin-bottom: 14px; }
+  .assump-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .assump-field label { display: block; font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--slate); margin-bottom: 6px; }
+
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .card .label { font-size: 11.5px; color: var(--slate); margin-bottom: 6px; }
+  .card .value { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  .week-card { background: var(--panel); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 10px; padding: 14px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(15,27,46,0.03); }
+  .week-title { font-family: 'Tiro Bangla', serif; font-size: 14px; margin-bottom: 8px; color: var(--ink); }
+  .row2 { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 10px; }
+  .row2.two-col { grid-template-columns: 1fr 1fr; }
+  .field { padding: 10px 12px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 13px; color: var(--ink); background: #FCFAF4; width: 100%; }
+  .stats-line { display: flex; gap: 14px; font-size: 12px; color: var(--slate); margin-bottom: 10px; flex-wrap: wrap; }
+  .stats-line b { color: var(--ink); }
+  .save-btn { width: 100%; padding: 10px 0; border-radius: 8px; border: none; background: var(--ink); color: #fff; font-weight: 700; font-size: 12.5px; cursor: pointer; letter-spacing: 0.01em; }
+  .save-btn:hover { background: var(--ink-2); }
+  .save-btn:disabled { opacity: 0.6; }
+  .save-btn.gold { background: var(--gold); color: var(--ink); }
+
+  .empty-notice { text-align: center; padding: 50px 16px; color: var(--slate); font-size: 13.5px; }
+
+  .settings-box { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+  .settings-title { font-family: 'Tiro Bangla', serif; font-size: 16px; margin-bottom: 8px; }
+  .settings-desc { font-size: 12.5px; color: var(--slate); margin-bottom: 10px; line-height: 1.6; }
+  #syncMsg { margin-top: 12px; font-size: 12px; }
+  .lang-toggle { display: flex; gap: 8px; }
+  .lang-btn { flex: 1; padding: 10px 0; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; color: var(--slate); font-weight: 600; font-size: 13px; cursor: pointer; }
+  .lang-btn.active { border-color: var(--gold); background: var(--gold-soft); color: var(--ink); }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { display: inline-block; animation: spin 1s linear infinite; }
+
+  @media (max-width: 480px) {
+    .r3 { grid-template-columns: 1fr; }
+    .r3 .ledger-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .r3 .ledger-cell:last-child { border-bottom: none; }
+    .assump-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="eyebrow">Nuhanat Venture</div>
+      <div class="title" id="hdrTitle"></div>
+      <div class="subtitle" id="hdrSubtitle"></div>
+    </div>
+    <button id="syncBtn" onclick="fetchFromSheet()">↻ <span id="syncLabel"></span></button>
+  </div>
+</header>
+
+<nav>
+  <button class="tab-btn active" data-tab="dashboard"></button>
+  <button class="tab-btn" data-tab="production"></button>
+  <button class="tab-btn" data-tab="singeing"></button>
+  <button class="tab-btn" data-tab="lifetime"></button>
+  <button class="tab-btn" data-tab="settings"></button>
+</nav>
+
+<main>
+  <div class="panel active" id="panel-dashboard"></div>
+  <div class="panel" id="panel-production"></div>
+  <div class="panel" id="panel-singeing"></div>
+  <div class="panel" id="panel-lifetime"></div>
+  <div class="panel" id="panel-settings"></div>
+</main>
+
+<script>
+const I18N = {
+  bn: {
+    title: 'ইসলাম উইভিং ফ্যাক্টরি',
+    subtitle: 'Raiganj, Sirajganj — প্রোডাকশন ও লাভ ট্র্যাকার',
+    tabDashboard: 'সারাংশ', tabProduction: 'প্রোডাকশন', tabSingeing: 'সিঙ্গিং', tabLifetime: 'লাইফটাইম', tabSettings: 'সেটিংস',
+    syncNoUrl: 'শীট লিংক সেট করুন', syncSyncing: 'সিঙ্ক হচ্ছে...', syncOk: 'সিঙ্ক আছে', syncError: 'সিঙ্ক ব্যর্থ',
+    emptyNotice: 'শীটের সাথে এখনো সিঙ্ক হয়নি। "সেটিংস" ট্যাবে গিয়ে Apps Script লিংক বসান।',
+    prodCardTitle: 'প্রোডাকশন প্রফিট — এই মাস', tag24_4_2: '২৪ / ৪ / ২ মেশিন',
+    label24: '২৪ মেশিন (ফ্যাক্টরি টোটাল)', label4: '৪ মেশিন (আমার ভাগ)', label2: '২ মেশিন',
+    overallTitle: 'সামগ্রিক আয় ও লাভ-ক্ষতি', tagCombined: 'সংযুক্ত',
+    labelSingeingIncome: 'সিঙ্গিং ইনকাম (এই মাস)', labelCombinedIncome: 'কম্বাইন্ড ইনকাম (৪+২+সিঙ্গিং)',
+    labelYearPL: (y) => y + ' সালের লাভ/ক্ষতি', labelLifetimePL: 'লাইফটাইম লাভ/ক্ষতি',
+    assumpTitle: 'বর্তমান অ্যাসাম্পশন',
+    assumpDesc: 'মার্কেট রেট, মেশিন সংখ্যা বা সিঙ্গিং রেট বদলালে এখান থেকেই আপডেট করুন — সব হিসাব অটো রিক্যালকুলেট হবে।',
+    assumpMarket: 'মার্কেট রেট (৳/থান)', assumpMachines: 'মোট মেশিন', assumpSingeing: 'সিঙ্গিং রেট (৳/থান)',
+    btnSaveAssump: 'অ্যাসাম্পশন সেভ করুন',
+    weekLabel: (n) => 'সপ্তাহ ' + n,
+    datePlaceholder: 'তারিখ (যেমন 9.7.26)', piecesPlaceholder: 'মোট পিস',
+    statThaan: 'থান:', statTotalProfit: 'টোটাল প্রফিট:', statMyProfit: 'আমার প্রফিট:', stat2Machine: '২ মেশিন:', statCombined: 'কম্বাইন্ড:',
+    btnSaveSheet: 'শীটে সেভ করুন',
+    payLabel: 'পে:', singedPlaceholder: 'সিঙড থান', btnSave: 'সেভ',
+    curEntryTitle: (m, y) => m + ' ' + y + ' — এই মাসের এন্ট্রি', tagCurMonth: 'বর্তমান মাস',
+    labelInvestment: 'ইনভেস্টমেন্ট (৳)', labelMonthlyIncome: 'মান্থলি ইনকাম (৳)',
+    statYearCum: 'এ বছর কিউমুলেটিভ:', statYearPL: 'এ বছর লাভ/ক্ষতি:', statLifetimePL: 'লাইফটাইম লাভ/ক্ষতি:',
+    notFoundMonth: (m, y) => m + ' ' + y + ' শীটে খুঁজে পাওয়া যায়নি।',
+    yearTableTitle: (y) => y + ' সালের মাসভিত্তিক হিসাব', tagViewOnly: 'দেখার জন্য',
+    colMonth: 'মাস', colInvest: 'ইনভেস্ট', colIncome: 'ইনকাম', colPL: 'লাভ/ক্ষতি',
+    yearlySummaryTitle: 'বছরভিত্তিক লাইফটাইম সারাংশ', tagRange: '২০২৬–২০৫০',
+    colYear: 'বছর', colTotalInvest: 'মোট ইনভেস্ট', colTotalIncome: 'মোট ইনকাম', colLifetimePL: 'লাইফটাইম লাভ/ক্ষতি',
+    settingsTitle: 'Google Sheet সিঙ্ক',
+    settingsDesc: 'Apps Script ডিপ্লয় করার পর যে ওয়েব অ্যাপ লিংক পাবেন, সেটা এখানে বসান।',
+    urlPlaceholder: 'https://script.google.com/macros/s/.../exec',
+    btnSaveSettings: 'সেভ করুন',
+    syncMsgOk: '✓ সিঙ্ক সফল হয়েছে', syncMsgError: '✗ সিঙ্ক ব্যর্থ — লিংক ও শেয়ারিং সেটিংস চেক করুন',
+    syncMsgNoUrl: 'লিংক এখনো বসানো হয়নি', syncMsgSyncing: 'সিঙ্ক হচ্ছে...',
+    languageTitle: 'ভাষা', languageDesc: 'অ্যাপের ভাষা বেছে নিন — এটা সাথে সাথে বদলে যাবে।',
+    langBangla: 'বাংলা', langEnglish: 'English',
+  },
+  en: {
+    title: 'Islam Weaving Factory',
+    subtitle: 'Raiganj, Sirajganj — Production & Profit Tracker',
+    tabDashboard: 'Summary', tabProduction: 'Production', tabSingeing: 'Singeing', tabLifetime: 'Lifetime', tabSettings: 'Settings',
+    syncNoUrl: 'Set sheet link', syncSyncing: 'Syncing...', syncOk: 'Synced', syncError: 'Sync failed',
+    emptyNotice: 'Not synced with the sheet yet. Go to "Settings" and add the Apps Script link.',
+    prodCardTitle: 'Production Profit — This Month', tag24_4_2: '24 / 4 / 2 Machines',
+    label24: '24 Machines (Factory Total)', label4: '4 Machines (My Share)', label2: '2 Machines',
+    overallTitle: 'Overall Income & Profit/Loss', tagCombined: 'Combined',
+    labelSingeingIncome: 'Singeing Income (This Month)', labelCombinedIncome: 'Combined Income (4+2+Singeing)',
+    labelYearPL: (y) => y + ' Profit/Loss', labelLifetimePL: 'Lifetime Profit/Loss',
+    assumpTitle: 'Current Assumptions',
+    assumpDesc: 'Change market rate, machine count, or singeing rate here — everything recalculates automatically.',
+    assumpMarket: 'Market Rate (৳/Thaan)', assumpMachines: 'Total Machines', assumpSingeing: 'Singeing Rate (৳/Thaan)',
+    btnSaveAssump: 'Save Assumptions',
+    weekLabel: (n) => 'Week ' + n,
+    datePlaceholder: 'Date (e.g. 9.7.26)', piecesPlaceholder: 'Total Pieces',
+    statThaan: 'Thaan:', statTotalProfit: 'Total Profit:', statMyProfit: 'My Profit:', stat2Machine: '2 Machines:', statCombined: 'Combined:',
+    btnSaveSheet: 'Save to Sheet',
+    payLabel: 'Pay:', singedPlaceholder: 'Singed Thaan', btnSave: 'Save',
+    curEntryTitle: (m, y) => m + " " + y + " — This Month's Entry", tagCurMonth: 'Current Month',
+    labelInvestment: 'Investment (৳)', labelMonthlyIncome: 'Monthly Income (৳)',
+    statYearCum: 'This Year Cumulative:', statYearPL: 'This Year P/L:', statLifetimePL: 'Lifetime P/L:',
+    notFoundMonth: (m, y) => m + ' ' + y + ' not found in the sheet.',
+    yearTableTitle: (y) => y + ' Monthly Breakdown', tagViewOnly: 'View Only',
+    colMonth: 'Month', colInvest: 'Invest', colIncome: 'Income', colPL: 'P/L',
+    yearlySummaryTitle: 'Yearly Lifetime Summary', tagRange: '2026–2050',
+    colYear: 'Year', colTotalInvest: 'Total Invest', colTotalIncome: 'Total Income', colLifetimePL: 'Lifetime P/L',
+    settingsTitle: 'Google Sheet Sync',
+    settingsDesc: 'After deploying Apps Script, paste the web app link you get here.',
+    urlPlaceholder: 'https://script.google.com/macros/s/.../exec',
+    btnSaveSettings: 'Save',
+    syncMsgOk: '✓ Sync successful', syncMsgError: '✗ Sync failed — check the link and sharing settings',
+    syncMsgNoUrl: 'Link not set yet', syncMsgSyncing: 'Syncing...',
+    languageTitle: 'Language', languageDesc: 'Choose the app language — it updates instantly.',
+    langBangla: 'বাংলা', langEnglish: 'English',
+  }
+};
+
+let lang = localStorage.getItem('appLang') || 'bn';
+function t(key, ...args) {
+  const entry = I18N[lang][key];
+  return typeof entry === 'function' ? entry(...args) : entry;
+}
+
+let scriptUrl = localStorage.getItem('appsScriptUrl') || '';
+let data = null;
+let syncStatus = 'no-url';
+
+function fmtBDT(n) {
+  const v = Number(n) || 0;
+  return '৳' + v.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+}
+
+function applyStaticText() {
+  document.getElementById('hdrTitle').textContent = t('title');
+  document.getElementById('hdrSubtitle').textContent = t('subtitle');
+  document.querySelector('[data-tab="dashboard"]').textContent = t('tabDashboard');
+  document.querySelector('[data-tab="production"]').textContent = t('tabProduction');
+  document.querySelector('[data-tab="singeing"]').textContent = t('tabSingeing');
+  document.querySelector('[data-tab="lifetime"]').textContent = t('tabLifetime');
+  document.querySelector('[data-tab="settings"]').textContent = t('tabSettings');
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+function setSyncStatus(status) {
+  syncStatus = status;
+  const label = document.getElementById('syncLabel');
+  const map = { 'no-url': t('syncNoUrl'), 'syncing': t('syncSyncing'), 'ok': t('syncOk'), 'error': t('syncError') };
+  label.textContent = map[status] || '';
+  renderSettings();
+}
+
+async function fetchFromSheet() {
+  if (!scriptUrl) { setSyncStatus('no-url'); return; }
+  setSyncStatus('syncing');
+  try {
+    const r = await fetch(scriptUrl);
+    const json = await r.json();
+    data = json;
+    setSyncStatus('ok');
+    renderAll();
+  } catch (e) {
+    setSyncStatus('error');
+  }
+}
+
+async function pushAction(action) {
+  if (!scriptUrl) return false;
+  setSyncStatus('syncing');
+  try {
+    await fetch(scriptUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(action),
+    });
+    await fetchFromSheet();
+    return true;
+  } catch (e) {
+    setSyncStatus('error');
+    return false;
+  }
+}
+
+function renderAll() {
+  applyStaticText();
+  renderDashboard();
+  renderProduction();
+  renderSingeing();
+  renderLifetime();
+  renderSettings();
+}
+
+function emptyNotice() {
+  return '<div class="empty-notice">' + t('emptyNotice') + '</div>';
+}
+
+function plMarkup(v) {
+  const n = Number(v) || 0;
+  const cls = n >= 0 ? 'pos' : 'neg';
+  return '<span class="dot ' + cls + '"></span><span class="cvalue ' + cls + '" style="font-size:inherit;">' + fmtBDT(n) + '</span>';
+}
+
+function renderDashboard() {
+  const el = document.getElementById('panel-dashboard');
+  if (!data) { el.innerHTML = emptyNotice(); return; }
+
+  const sum = (arr, key) => arr.reduce((s, x) => s + (Number(x[key]) || 0), 0);
+  const p24 = sum(data.weeks, 'totalProfit');
+  const p4 = sum(data.weeks, 'myProfit');
+  const p2 = sum(data.weeks, 'twoMachineProfit');
+  const singeingIncome = sum(data.singeing, 'pay');
+  const combined = sum(data.weeks, 'combinedProfit');
+  const lifetimeRows = data.lifetime.filter(r => r.profitLossLifetime !== '');
+  const last = lifetimeRows.slice(-1)[0];
+  const yearLabel = last ? last.year : '—';
+  const yearPL = last ? last.profitLossYear : 0;
+  const lifetimePL = last ? last.profitLossLifetime : 0;
+
+  el.innerHTML = `
+    <div class="ledger-card">
+      <div class="ledger-head"><div class="name">${t('prodCardTitle')}</div><div class="tag">${t('tag24_4_2')}</div></div>
+      <div class="ledger-row r3">
+        <div class="ledger-cell"><div class="clabel">${t('label24')}</div><div class="cvalue">${fmtBDT(p24)}</div></div>
+        <div class="ledger-cell"><div class="clabel">${t('label4')}</div><div class="cvalue pos">${fmtBDT(p4)}</div></div>
+        <div class="ledger-cell"><div class="clabel">${t('label2')}</div><div class="cvalue pos">${fmtBDT(p2)}</div></div>
+      </div>
+    </div>
+
+    <div class="ledger-card">
+      <div class="ledger-head"><div class="name">${t('overallTitle')}</div><div class="tag">${t('tagCombined')}</div></div>
+      <div class="ledger-row r2x2">
+        <div class="ledger-cell"><div class="clabel">${t('labelSingeingIncome')}</div><div class="cvalue" style="color:var(--gold);">${fmtBDT(singeingIncome)}</div></div>
+        <div class="ledger-cell"><div class="clabel">${t('labelCombinedIncome')}</div><div class="cvalue pos">${fmtBDT(combined)}</div></div>
+        <div class="ledger-cell"><div class="clabel">${t('labelYearPL', yearLabel)}</div><div class="cvalue ${yearPL >= 0 ? 'pos' : 'neg'}">${plMarkup(yearPL)}</div></div>
+        <div class="ledger-cell"><div class="clabel">${t('labelLifetimePL')}</div><div class="cvalue ${lifetimePL >= 0 ? 'pos' : 'neg'}">${plMarkup(lifetimePL)}</div></div>
+      </div>
+    </div>
+
+    <div class="assump-card">
+      <div class="assump-title">${t('assumpTitle')}</div>
+      <div class="assump-desc">${t('assumpDesc')}</div>
+      <div class="assump-grid">
+        <div class="assump-field"><label>${t('assumpMarket')}</label><input class="field" id="assump-market" type="number" value="${data.assumptions.marketRate}" /></div>
+        <div class="assump-field"><label>${t('assumpMachines')}</label><input class="field" id="assump-machines" type="number" value="${data.assumptions.totalMachines}" /></div>
+        <div class="assump-field"><label>${t('assumpSingeing')}</label><input class="field" id="assump-singeing" type="number" value="${data.assumptions.singeingRate}" /></div>
+      </div>
+      <button class="save-btn gold" onclick="saveAssumptions()">${t('btnSaveAssump')}</button>
+    </div>`;
+}
+
+async function saveAssumptions() {
+  const marketRate = Number(document.getElementById('assump-market').value) || 0;
+  const totalMachines = Number(document.getElementById('assump-machines').value) || 0;
+  const singeingRate = Number(document.getElementById('assump-singeing').value) || 0;
+  await pushAction({ action: 'updateAssumptions', marketRate, totalMachines, singeingRate });
+}
+
+function renderProduction() {
+  const el = document.getElementById('panel-production');
+  if (!data) { el.innerHTML = emptyNotice(); return; }
+  el.innerHTML = data.weeks.map((w, i) => `
+    <div class="week-card">
+      <div class="week-title">${t('weekLabel', w.week)}</div>
+      <div class="row2 two-col">
+        <input class="field" id="prod-date-${i}" placeholder="${t('datePlaceholder')}" value="${w.date || ''}" />
+        <input class="field" id="prod-pieces-${i}" type="number" placeholder="${t('piecesPlaceholder')}" value="${w.totalPieces || ''}" />
+      </div>
+      <div class="stats-line">
+        <span>${t('statThaan')} <b>${w.weeklyThaan}</b></span>
+        <span>${t('statTotalProfit')} <b>${fmtBDT(w.totalProfit)}</b></span>
+        <span>${t('statMyProfit')} <b style="color:var(--emerald)">${fmtBDT(w.myProfit)}</b></span>
+        <span>${t('stat2Machine')} <b>${fmtBDT(w.twoMachineProfit)}</b></span>
+        <span>${t('statCombined')} <b style="color:var(--emerald)">${fmtBDT(w.combinedProfit)}</b></span>
+      </div>
+      <button class="save-btn" onclick="saveWeek(${i})">${t('btnSaveSheet')}</button>
+    </div>
+  `).join('');
+}
+
+async function saveWeek(i) {
+  const date = document.getElementById('prod-date-' + i).value;
+  const totalPieces = Number(document.getElementById('prod-pieces-' + i).value) || 0;
+  await pushAction({ action: 'updateWeek', weekIndex: i + 1, date, totalPieces });
+}
+
+function renderSingeing() {
+  const el = document.getElementById('panel-singeing');
+  if (!data) { el.innerHTML = emptyNotice(); return; }
+  el.innerHTML = data.singeing.map((s, i) => `
+    <div class="week-card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <div>
+        <div class="week-title" style="margin-bottom:0;">${t('weekLabel', s.week)}</div>
+        <div style="font-size:11.5px;color:var(--slate);">${s.date} · ${t('payLabel')} ${fmtBDT(s.pay)}</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input class="field" style="width:100px;" id="sing-${i}" type="number" placeholder="${t('singedPlaceholder')}" value="${s.singedThaan || ''}" />
+        <button class="save-btn" style="width:auto;padding:10px 12px;" onclick="saveSingeing(${i})">${t('btnSave')}</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function saveSingeing(i) {
+  const singedThaan = Number(document.getElementById('sing-' + i).value) || 0;
+  await pushAction({ action: 'updateSingeing', weekIndex: i + 1, singedThaan });
+}
+
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function renderLifetime() {
+  const el = document.getElementById('panel-lifetime');
+  if (!data) { el.innerHTML = emptyNotice(); return; }
+
+  const now = new Date();
+  const curYear = now.getFullYear();
+  const curMonthName = MONTH_NAMES[now.getMonth()];
+  const curIndex = data.lifetime.findIndex(r => Number(r.year) === curYear && r.month === curMonthName);
+  const cur = curIndex >= 0 ? data.lifetime[curIndex] : null;
+
+  const currentCardHtml = cur ? `
+    <div class="ledger-card">
+      <div class="ledger-head"><div class="name">${t('curEntryTitle', cur.month, cur.year)}</div><div class="tag">${t('tagCurMonth')}</div></div>
+      <div style="padding:16px;">
+        <div class="row2 two-col" style="margin-bottom:12px;">
+          <div class="assump-field"><label>${t('labelInvestment')}</label><input class="field" id="life-cur-inv" type="number" value="${cur.investment || ''}" /></div>
+          <div class="assump-field"><label>${t('labelMonthlyIncome')}</label><input class="field" id="life-cur-inc" type="number" value="${cur.monthlyIncome || ''}" /></div>
+        </div>
+        <div class="stats-line" style="margin-bottom:12px;">
+          <span>${t('statYearCum')} <b>${fmtBDT(cur.cumIncomeYear)}</b></span>
+          <span>${t('statYearPL')} <b style="color:${Number(cur.profitLossYear) >= 0 ? 'var(--emerald)' : 'var(--garnet)'}">${fmtBDT(cur.profitLossYear)}</b></span>
+          <span>${t('statLifetimePL')} <b style="color:${Number(cur.profitLossLifetime) >= 0 ? 'var(--emerald)' : 'var(--garnet)'}">${fmtBDT(cur.profitLossLifetime)}</b></span>
+        </div>
+        <button class="save-btn gold" onclick="saveCurrentLifetime(${curIndex})">${t('btnSaveSheet')}</button>
+      </div>
+    </div>` : `<div class="empty-notice">${t('notFoundMonth', curMonthName, curYear)}</div>`;
+
+  const yearRows = data.lifetime.filter(r => Number(r.year) === curYear);
+  const yearTableRows = yearRows.map(r => `
+    <tr>
+      <td style="padding:7px 6px;border-bottom:1px solid var(--border);">${r.month}</td>
+      <td style="padding:7px 6px;border-bottom:1px solid var(--border);text-align:right;">${r.investment !== '' ? fmtBDT(r.investment) : '—'}</td>
+      <td style="padding:7px 6px;border-bottom:1px solid var(--border);text-align:right;">${r.monthlyIncome !== '' ? fmtBDT(r.monthlyIncome) : '—'}</td>
+      <td style="padding:7px 6px;border-bottom:1px solid var(--border);text-align:right;color:${r.profitLossYear !== '' && Number(r.profitLossYear) >= 0 ? 'var(--emerald)' : (r.profitLossYear !== '' ? 'var(--garnet)' : 'var(--slate)')};">${r.profitLossYear !== '' ? fmtBDT(r.profitLossYear) : '—'}</td>
+    </tr>`).join('');
+
+  const byYear = {};
+  data.lifetime.forEach(r => { if (r.profitLossLifetime !== '') byYear[r.year] = r; });
+  const yearlySummaryRows = Object.keys(byYear).sort().map(y => {
+    const r = byYear[y];
+    return `<tr>
+      <td style="padding:7px 6px;border-bottom:1px solid var(--border);">${y}</td>
+      <td style="padding:7px 6px;border-bottom:1px solid var(--border);text-align:right;">${fmtBDT(r.cumInvestLifetime)}</td>
+      <td style="padding:7px 6px;border-bottom:1px solid var(--border);text-align:right;">${fmtBDT(r.cumIncomeLifetime)}</td>
+      <td style="padding:7px 6px;border-bottom:1px solid var(--border);text-align:right;color:${Number(r.profitLossLifetime) >= 0 ? 'var(--emerald)' : 'var(--garnet)'};">${fmtBDT(r.profitLossLifetime)}</td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = currentCardHtml + `
+    <div class="ledger-card">
+      <div class="ledger-head"><div class="name">${t('yearTableTitle', curYear)}</div><div class="tag">${t('tagViewOnly')}</div></div>
+      <div style="padding:6px 16px 16px;overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+          <thead><tr style="color:var(--slate);text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.04em;">
+            <th style="padding:8px 6px;border-bottom:1px solid var(--border);">${t('colMonth')}</th>
+            <th style="padding:8px 6px;border-bottom:1px solid var(--border);text-align:right;">${t('colInvest')}</th>
+            <th style="padding:8px 6px;border-bottom:1px solid var(--border);text-align:right;">${t('colIncome')}</th>
+            <th style="padding:8px 6px;border-bottom:1px solid var(--border);text-align:right;">${t('colPL')}</th>
+          </tr></thead>
+          <tbody>${yearTableRows}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="ledger-card">
+      <div class="ledger-head"><div class="name">${t('yearlySummaryTitle')}</div><div class="tag">${t('tagRange')}</div></div>
+      <div style="padding:6px 16px 16px;max-height:280px;overflow-y:auto;overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+          <thead><tr style="color:var(--slate);text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.04em;">
+            <th style="padding:8px 6px;border-bottom:1px solid var(--border);position:sticky;top:0;background:#fff;">${t('colYear')}</th>
+            <th style="padding:8px 6px;border-bottom:1px solid var(--border);text-align:right;position:sticky;top:0;background:#fff;">${t('colTotalInvest')}</th>
+            <th style="padding:8px 6px;border-bottom:1px solid var(--border);text-align:right;position:sticky;top:0;background:#fff;">${t('colTotalIncome')}</th>
+            <th style="padding:8px 6px;border-bottom:1px solid var(--border);text-align:right;position:sticky;top:0;background:#fff;">${t('colLifetimePL')}</th>
+          </tr></thead>
+          <tbody>${yearlySummaryRows}</tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+async function saveCurrentLifetime(i) {
+  const investment = Number(document.getElementById('life-cur-inv').value) || 0;
+  const monthlyIncome = Number(document.getElementById('life-cur-inc').value) || 0;
+  const year = data.lifetime[i].year;
+  const month = data.lifetime[i].month;
+  await pushAction({ action: 'updateLifetimeMonth', year, month, investment, monthlyIncome });
+}
+
+function renderSettings() {
+  const el = document.getElementById('panel-settings');
+  const msgMap = {
+    'ok': '<span style="color:var(--emerald)">' + t('syncMsgOk') + '</span>',
+    'error': '<span style="color:var(--garnet)">' + t('syncMsgError') + '</span>',
+    'no-url': '<span style="color:var(--slate)">' + t('syncMsgNoUrl') + '</span>',
+    'syncing': '<span style="color:var(--gold)">' + t('syncMsgSyncing') + '</span>',
+  };
+  el.innerHTML = `
+    <div class="settings-box">
+      <div class="settings-title">${t('languageTitle')}</div>
+      <div class="settings-desc">${t('languageDesc')}</div>
+      <div class="lang-toggle">
+        <button class="lang-btn ${lang === 'bn' ? 'active' : ''}" onclick="setLang('bn')">${t('langBangla')}</button>
+        <button class="lang-btn ${lang === 'en' ? 'active' : ''}" onclick="setLang('en')">${t('langEnglish')}</button>
+      </div>
+    </div>
+    <div class="settings-box">
+      <div class="settings-title">${t('settingsTitle')}</div>
+      <div class="settings-desc">${t('settingsDesc')}</div>
+      <input class="field" id="urlInput" style="margin-bottom:10px;" placeholder="${t('urlPlaceholder')}" value="${scriptUrl}" />
+      <button class="save-btn" onclick="saveUrl()">${t('btnSaveSettings')}</button>
+      <div id="syncMsg">${msgMap[syncStatus] || ''}</div>
+    </div>`;
+}
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('appLang', l);
+  applyStaticText();
+  renderAll();
+}
+
+function saveUrl() {
+  scriptUrl = document.getElementById('urlInput').value.trim();
+  localStorage.setItem('appsScriptUrl', scriptUrl);
+  fetchFromSheet();
+}
+
+applyStaticText();
+renderSettings();
+if (scriptUrl) fetchFromSheet();
+else setSyncStatus('no-url');
+</script>
+
+</body>
+</html>
