@@ -1,806 +1,223 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ইসলাম উইভিং ফ্যাক্টরি — এক্সিকিউটিভ হিসাব খাতা</title>
-<link rel="manifest" href="manifest.json" />
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Tiro+Bangla&display=swap" rel="stylesheet" />
-
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          brand: {
-            950: '#030712',
-            900: '#0b1329', // Executive Navy
-            800: '#111c3a',
-            700: '#1e293b',
-            600: '#2563eb', // Royal Blue Primary
-            500: '#3b82f6',
-            100: '#dbeafe',
-            50: '#f8fafc',
-          },
-          luxuryGold: {
-            600: '#b45309',
-            500: '#d97706',
-            400: '#f59e0b',
-            50: '#fffbeb',
-          },
-          finGreen: {
-            600: '#059669',
-            500: '#10b981',
-            50: '#ecfdf5',
-          },
-          finRed: {
-            600: '#dc2626',
-            500: '#ef4444',
-            50: '#fef2f2',
-          }
-        },
-        fontFamily: {
-          sans: ['Plus Jakarta Sans', 'Hind Siliguri', 'sans-serif'],
-          serif: ['Tiro Bangla', 'serif'],
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Profit Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-      }
-    }
-  }
-</script>
 
-<style>
-  body {
-    background-color: #0b1329;
-    color: #0f172a;
-    -webkit-font-smoothing: antialiased;
-    background-image: 
-      radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(217, 119, 6, 0.12) 0px, transparent 50%),
-      radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.5) 0px, transparent 100%);
-    background-attachment: fixed;
-  }
+        body {
+            background-color: #f4f7f6;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
 
-  /* Universal Glassmorphism Classes */
-  .glass-card {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 20px;
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
-  }
+        .dashboard-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 650px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            position: relative;
+        }
 
-  /* Menu Navigation Buttons Glass Effect */
-  .glass-nav-btn {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #cbd5e1;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  }
+        /* Header & Online Sync Light */
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eef2f5;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
 
-  .glass-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.16);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    transform: translateY(-2px);
-  }
+        .title-group h2 {
+            color: #2c3e50;
+            font-size: 20px;
+        }
 
-  .glass-nav-btn.active {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-color: rgba(255, 255, 255, 0.9);
-    color: #0b1329;
-    font-weight: 800;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 1);
-    transform: translateY(-1px);
-  }
+        .month-badge {
+            display: inline-block;
+            background-color: #e8f4fd;
+            color: #1976d2;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
 
-  /* Synchronize Button Glass Effect */
-  .glass-btn-sync {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+        /* Online Sync Notification Light Style */
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #555;
+            background: #f8f9fa;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #e0e0e0;
+        }
 
-  .glass-btn-sync:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.35);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    transform: translateY(-1px);
-  }
+        .sync-light {
+            width: 10px;
+            height: 10px;
+            background-color: #2ecc71;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #2ecc71;
+            animation: blink 1.5s infinite;
+        }
 
-  /* Ultra-Premium Glass Notification Light LED */
-  .status-dot-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 14px;
-    height: 14px;
-  }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
 
-  .status-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    position: relative;
-    z-index: 2;
-    transition: all 0.4s ease;
-  }
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
 
-  .status-pulse-ring {
-    position: absolute;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    z-index: 1;
-    opacity: 0.75;
-    animation: glassGlowPulse 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1);
-  }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
 
-  /* State 1: Online / Synced (Neon Emerald Glass) */
-  .status-synced .status-dot {
-    background: radial-gradient(circle at 35% 35%, #ffffff, #10b981 65%, #047857);
-    box-shadow: 0 0 12px #10b981, inset 0 1px 2px rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-  }
-  .status-synced .status-pulse-ring {
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.45) 0%, rgba(16, 185, 129, 0) 70%);
-  }
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
 
-  /* State 2: Syncing (Amber Amber Glass) */
-  .status-syncing .status-dot {
-    background: radial-gradient(circle at 35% 35%, #ffffff, #f59e0b 65%, #b45309);
-    box-shadow: 0 0 12px #f59e0b, inset 0 1px 2px rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-  }
-  .status-syncing .status-pulse-ring {
-    background: radial-gradient(circle, rgba(245, 158, 11, 0.5) 0%, rgba(245, 158, 11, 0) 70%);
-    animation-duration: 1.2s; /* Faster spin pulse for active sync */
-  }
+        .input-profit {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
 
-  /* State 3: Error / Unlinked (Crimson Red Glass) */
-  .status-error .status-dot, .status-no-url .status-dot {
-    background: radial-gradient(circle at 35% 35%, #ffffff, #ef4444 65%, #991b1b);
-    box-shadow: 0 0 12px #ef4444, inset 0 1px 2px rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-  }
-  .status-error .status-pulse-ring, .status-no-url .status-pulse-ring {
-    background: radial-gradient(circle, rgba(239, 68, 68, 0.45) 0%, rgba(239, 68, 68, 0) 70%);
-  }
+        .input-profit:focus {
+            border-color: #3498db;
+        }
 
-  @keyframes glassGlowPulse {
-    0% {
-      transform: scale(0.7);
-      opacity: 0.8;
-    }
-    50% {
-      transform: scale(1.4);
-      opacity: 0.2;
-    }
-    100% {
-      transform: scale(0.7);
-      opacity: 0.8;
-    }
-  }
+        /* Combined Income Row Styling */
+        .combined-row {
+            background-color: #f0fdf4;
+            font-weight: bold;
+        }
 
-  /* Action Buttons Glass Effect */
-  .glass-btn-primary {
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(29, 78, 216, 0.95));
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    color: #ffffff;
-    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    transition: all 0.25s ease;
-  }
+        .combined-row td {
+            border-top: 2px solid #2ecc71;
+            border-bottom: 2px solid #2ecc71;
+            color: #166534;
+            font-size: 16px;
+        }
 
-  .glass-btn-primary:hover {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(37, 99, 235, 1));
-    box-shadow: 0 12px 25px rgba(37, 99, 235, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    transform: translateY(-1.5px);
-  }
-
-  .fintech-hero {
-    background: linear-gradient(135deg, rgba(11, 19, 41, 0.95) 0%, rgba(17, 28, 58, 0.9) 60%, rgba(30, 41, 59, 0.85) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 25px 35px -10px rgba(0, 0, 0, 0.5);
-  }
-
-  .input-field {
-    background-color: rgba(248, 250, 252, 0.9);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1.5px solid #cbd5e1;
-    border-radius: 12px;
-    padding: 10px 14px;
-    transition: all 0.2s;
-  }
-
-  .input-field:focus {
-    background-color: #ffffff;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
-    outline: none;
-  }
-
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-</style>
+        .total-amount {
+            font-size: 18px;
+            color: #15803d;
+        }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans">
+<body>
 
-<!-- Corporate Top Header with Frost Effect -->
-<header class="bg-brand-950/80 backdrop-blur-xl text-white border-b border-white/10 sticky top-0 z-50 shadow-2xl">
-  <div class="max-w-5xl mx-auto px-4 py-3.5 flex justify-between items-center">
-    <div class="flex items-center gap-3.5">
-      <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-amber-500 flex items-center justify-center font-black text-lg text-white shadow-lg border border-white/30">
-        IW
-      </div>
-      <div>
-        <div class="text-[9px] tracking-[0.2em] text-amber-400 font-extrabold uppercase">Islam Weaving Enterprise</div>
-        <h1 class="font-serif text-lg sm:text-xl text-slate-50 font-bold leading-tight" id="hdrTitle"></h1>
-        <p class="text-[11px] text-slate-400 font-medium" id="hdrSubtitle"></p>
-      </div>
+<div class="dashboard-card">
+    <!-- Header with Auto Month & Sync Light -->
+    <div class="header-area">
+        <div class="title-group">
+            <h2>Production & Profit Chart</h2>
+            <div class="month-badge" id="currentMonth">-- ----</div>
+        </div>
+        
+        <!-- Online Sync Notification Light -->
+        <div class="sync-status">
+            <span class="sync-light"></span>
+            <span>Online Sync</span>
+        </div>
     </div>
-    
-    <!-- Ultra Premium Glass Sync Button & Indicator -->
-    <button id="syncBtn" onclick="fetchFromSheet()" class="glass-btn-sync text-slate-100 rounded-2xl px-4 py-2 text-xs font-bold flex items-center gap-3">
-      <div class="status-dot-container status-no-url" id="statusIndicator">
-        <div class="status-pulse-ring"></div>
-        <div class="status-dot"></div>
-      </div>
-      <span id="syncLabel"></span>
-    </button>
-  </div>
-</header>
 
-<!-- Navigation Bar with High-End Frosted Glass Effect Buttons -->
-<div class="bg-brand-950/60 backdrop-blur-2xl border-b border-white/10 sticky top-[69px] z-40 py-2.5 shadow-xl">
-  <nav class="max-w-5xl mx-auto px-4 flex gap-2 overflow-x-auto no-scrollbar">
-    <button class="glass-nav-btn nav-tab px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap active" data-tab="dashboard"></button>
-    <button class="glass-nav-btn nav-tab px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap" data-tab="production"></button>
-    <button class="glass-nav-btn nav-tab px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap" data-tab="singeing"></button>
-    <button class="glass-nav-btn nav-tab px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap" data-tab="lifetime"></button>
-    <button class="glass-nav-btn nav-tab px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap" data-tab="settings"></button>
-  </nav>
+    <!-- Main Calculation Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>উৎপাদন / সার্ভিস</th>
+                <th>প্রফিট পরিমাণ (৳)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>২৪ মেশিন প্রডাকশন</td>
+                <td><input type="number" class="input-profit" value="0" oninput="calculateTotal()"></td>
+            </tr>
+            <tr>
+                <td>৪ মেশিন প্রডাকশন</td>
+                <td><input type="number" class="input-profit" value="0" oninput="calculateTotal()"></td>
+            </tr>
+            <tr>
+                <td>২ মেশিন প্রডাকশন</td>
+                <td><input type="number" class="input-profit" value="0" oninput="calculateTotal()"></td>
+            </tr>
+            <tr>
+                <td>Singing Income</td>
+                <td><input type="number" class="input-profit" value="0" oninput="calculateTotal()"></td>
+            </tr>
+            <tr class="combined-row">
+                <td>Combined Income (মোট প্রফিট)</td>
+                <td><span id="combinedIncome" class="total-amount">৳ 0</span></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
-<!-- Main Body Area -->
-<main class="max-w-5xl mx-auto px-4 py-6 flex-1 w-full">
-  <div class="panel block" id="panel-dashboard"></div>
-  <div class="panel hidden" id="panel-production"></div>
-  <div class="panel hidden" id="panel-singeing"></div>
-  <div class="panel hidden" id="panel-lifetime"></div>
-  <div class="panel hidden" id="panel-settings"></div>
-</main>
-
 <script>
-const I18N = {
-  bn: {
-    title: 'ইসলাম উইভিং ফ্যাক্টরি',
-    subtitle: 'রায়গঞ্জ, সিরাজগঞ্জ — প্রোডাকশন ও ফাইনান্স ড্যাশবোর্ড',
-    tabDashboard: 'সারাংশ', tabProduction: 'প্রোডাকশন', tabSingeing: 'সিঙ্গিং', tabLifetime: 'লাইফটাইম', tabSettings: 'সেটিংস',
-    syncNoUrl: 'শীট লিংক সেট করুন', syncSyncing: 'সিঙ্ক হচ্ছে...', syncOk: 'অনলাইন সিঙ্কড', syncError: 'সিঙ্ক ব্যর্থ',
-    emptyNotice: 'শীটের সাথে এখনো সিঙ্ক হয়নি। "সেটিংস" ট্যাবে গিয়ে Google Apps Script লিংকটি দিন।',
-    prodCardTitle: 'প্রোডাকশন প্রফিট — চলতি মাস', tag24_4_2: '২৪ / ৪ / ২ মেশিন',
-    label24: '২৪ মেশিন (ফ্যাক্টরি টোটাল)', label4: '৪ মেশিন (আমার ভাগ)', label2: '২ মেশিন',
-    overallTitle: 'সামগ্রিক আয় ও লাভ-ক্ষতি বিবরণী', tagCombined: 'কম্বাইন্ড ব্যালেন্স',
-    labelSingeingIncome: 'সিঙ্গিং ইনকাম (চলতি মাস)', labelCombinedIncome: 'কম্বাইন্ড ইনকাম (৪+২+সিঙ্গিং)',
-    labelYearPL: (y) => y + ' সালের লাভ/ক্ষতি', labelLifetimePL: 'লাইফটাইম নেট প্রফিট',
-    assumpTitle: 'ব্যবসার মূল প্যারামিটারসমূহ',
-    assumpDesc: 'মার্কেট রেট, মেশিন সংখ্যা বা সিঙ্গিং রেট বদলালে এখান থেকে সেভ করুন — সব হিসাব রিক্যালকুলেট হবে।',
-    assumpMarket: 'মার্কেট রেট (৳/থান)', assumpMachines: 'মোট মেশিন', assumpSingeing: 'সিঙ্গিং রেট (৳/থান)',
-    btnSaveAssump: 'প্যারামিটার সেভ করুন',
-    weekLabel: (n) => 'সপ্তাহ ' + n,
-    datePlaceholder: 'তারিখ (যেমন 9.7.26)', piecesPlaceholder: 'মোট পিস',
-    statThaan: 'থান:', statTotalProfit: 'টোটাল প্রফিট:', statMyProfit: 'আমার প্রফিট:', stat2Machine: '২ মেশিন:', statCombined: 'কম্বাইন্ড:',
-    btnSaveSheet: 'শীটে সেভ করুন',
-    payLabel: 'বিল:', singedPlaceholder: 'সিঙড থান', btnSave: 'সেভ',
-    curEntryTitle: (m, y) => m + ' ' + y + ' — এই মাসের স্টেটমেন্ট', tagCurMonth: 'চলতি মাস',
-    labelInvestment: 'ইনভেস্টমেন্ট (৳)', labelMonthlyIncome: 'মান্থলি ইনকাম (৳)',
-    statYearCum: 'এ বছর কিউমুলেティブ:', statYearPL: 'এ বছর লাভ/ক্ষতি:', statLifetimePL: 'লাইফটাইম লাভ/ক্ষতি:',
-    notFoundMonth: (m, y) => m + ' ' + y + ' শীটে খুঁজে পাওয়া যায়নি।',
-    yearTableTitle: (y) => y + ' সালের মাসভিত্তিক বিবরণী', tagViewOnly: 'ভিউ অনলি',
-    colMonth: 'মাস', colInvest: 'ইনভেস্ট', colIncome: 'ইনকাম', colPL: 'লাভ/ক্ষতি',
-    yearlySummaryTitle: 'বছরভিত্তিক লাইফটাইম সামারি', tagRange: '২০২৬–২০৫০',
-    colYear: 'বছর', colTotalInvest: 'মোট ইনভেস্ট', colTotalIncome: 'মোট ইনকাম', colLifetimePL: 'লাইফটাইম লাভ/ক্ষতি',
-    settingsTitle: 'Google Sheet সিঙ্ক সেটিংস',
-    settingsDesc: 'Apps Script ডিপ্লয় করার পর প্রাপ্ত ওয়েব অ্যাপ লিংকটি নিচে বসান।',
-    urlPlaceholder: 'https://script.google.com/macros/s/.../exec',
-    btnSaveSettings: 'লিংক সেভ করুন',
-    syncMsgOk: '✓ সিঙ্ক সফল হয়েছে', syncMsgError: '✗ সিঙ্ক ব্যর্থ — লিংক ও শেয়ারিং সেটিংস পরীক্ষা করুন',
-    syncMsgNoUrl: 'লিংক এখনো বসানো হয়নি', syncMsgSyncing: 'সিঙ্ক হচ্ছে...',
-    languageTitle: 'ভাষা নির্বাচন (Language)', languageDesc: 'আপনার পছন্দের ভাষা বেছে নিন।',
-    langBangla: 'বাংলা', langEnglish: 'English',
-  },
-  en: {
-    title: 'Islam Weaving Factory',
-    subtitle: 'Raiganj, Sirajganj — Production & Finance Dashboard',
-    tabDashboard: 'Summary', tabProduction: 'Production', tabSingeing: 'Singeing', tabLifetime: 'Lifetime', tabSettings: 'Settings',
-    syncNoUrl: 'Set sheet link', syncSyncing: 'Syncing...', syncOk: 'Online Synced', syncError: 'Sync failed',
-    emptyNotice: 'Not synced with the sheet yet. Go to "Settings" and enter the Apps Script link.',
-    prodCardTitle: 'Production Profit — Current Month', tag24_4_2: '24 / 4 / 2 Machines',
-    label24: '24 Machines (Factory Total)', label4: '4 Machines (My Share)', label2: '2 Machines',
-    overallTitle: 'Overall Financial Statement', tagCombined: 'Combined Balance',
-    labelSingeingIncome: 'Singeing Income (This Month)', labelCombinedIncome: 'Combined Income (4+2+Singeing)',
-    labelYearPL: (y) => y + ' Profit/Loss', labelLifetimePL: 'Lifetime Net Profit',
-    assumpTitle: 'Core Business Parameters',
-    assumpDesc: 'Update market rate, machine count, or singeing rate here — all data will recalculate automatically.',
-    assumpMarket: 'Market Rate (৳/Thaan)', assumpMachines: 'Total Machines', assumpSingeing: 'Singeing Rate (৳/Thaan)',
-    btnSaveAssump: 'Save Parameters',
-    weekLabel: (n) => 'Week ' + n,
-    datePlaceholder: 'Date (e.g. 9.7.26)', piecesPlaceholder: 'Total Pieces',
-    statThaan: 'Thaan:', statTotalProfit: 'Total Profit:', statMyProfit: 'My Profit:', stat2Machine: '2 Machines:', statCombined: 'Combined:',
-    btnSaveSheet: 'Save to Sheet',
-    payLabel: 'Pay:', singedPlaceholder: 'Singed Thaan', btnSave: 'Save',
-    curEntryTitle: (m, y) => m + " " + y + " — Monthly Statement", tagCurMonth: 'Current Month',
-    labelInvestment: 'Investment (৳)', labelMonthlyIncome: 'Monthly Income (৳)',
-    statYearCum: 'This Year Cumulative:', statYearPL: 'This Year P/L:', statLifetimePL: 'Lifetime P/L:',
-    notFoundMonth: (m, y) => m + ' ' + y + ' not found in the sheet.',
-    yearTableTitle: (y) => y + ' Monthly Statement', tagViewOnly: 'View Only',
-    colMonth: 'Month', colInvest: 'Invest', colIncome: 'Income', colPL: 'P/L',
-    yearlySummaryTitle: 'Yearly Lifetime Summary', tagRange: '2026–2050',
-    colYear: 'Year', colTotalInvest: 'Total Invest', colTotalIncome: 'Total Income', colLifetimePL: 'Lifetime P/L',
-    settingsTitle: 'Google Sheet Sync Settings',
-    settingsDesc: 'Enter your deployed Google Apps Script URL below.',
-    urlPlaceholder: 'https://script.google.com/macros/s/.../exec',
-    btnSaveSettings: 'Save Link',
-    syncMsgOk: '✓ Sync successful', syncMsgError: '✗ Sync failed — check URL and permissions',
-    syncMsgNoUrl: 'Link not configured', syncMsgSyncing: 'Syncing...',
-    languageTitle: 'Language Selection', languageDesc: 'Choose interface language.',
-    langBangla: 'বাংলা', langEnglish: 'English',
-  }
-};
+    // ১. ক্যালেন্ডার থেকে অটোমেটিক চলতি মাস ও বছর সেট করার ফংশন
+    function setAutomaticMonth() {
+        const date = new Date();
+        const options = { month: 'long', year: 'numeric' };
+        const formattedMonth = date.toLocaleDateString('bn-BD', options); // বাংলা ফরম্যাট
+        // ইংরেজি নাম চাইলে নিচের লাইন ব্যবহার করতে পারেন:
+        // const formattedMonth = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        
+        document.getElementById('currentMonth').innerText = formattedMonth;
+    }
 
-let lang = localStorage.getItem('appLang') || 'bn';
-function t(key, ...args) {
-  const entry = I18N[lang][key];
-  return typeof entry === 'function' ? entry(...args) : entry;
-}
+    // ২. প্রফিট অটোমেটিক যোগ করার ফংশন
+    function calculateTotal() {
+        const inputs = document.querySelectorAll('.input-profit');
+        let total = 0;
+        
+        inputs.forEach(input => {
+            const val = parseFloat(input.value);
+            if (!isNaN(val)) {
+                total += val;
+            }
+        });
 
-let scriptUrl = localStorage.getItem('appsScriptUrl') || '';
-let data = null;
-let syncStatus = 'no-url';
+        document.getElementById('combinedIncome').innerText = '৳ ' + total.toLocaleString('bn-BD');
+    }
 
-function fmtBDT(n) {
-  const v = Number(n) || 0;
-  return '৳' + v.toLocaleString('en-IN', { maximumFractionDigits: 0 });
-}
-
-function applyStaticText() {
-  document.getElementById('hdrTitle').textContent = t('title');
-  document.getElementById('hdrSubtitle').textContent = t('subtitle');
-  document.querySelector('[data-tab="dashboard"]').textContent = t('tabDashboard');
-  document.querySelector('[data-tab="production"]').textContent = t('tabProduction');
-  document.querySelector('[data-tab="singeing"]').textContent = t('tabSingeing');
-  document.querySelector('[data-tab="lifetime"]').textContent = t('tabLifetime');
-  document.querySelector('[data-tab="settings"]').textContent = t('tabSettings');
-}
-
-document.querySelectorAll('.nav-tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
-    btn.classList.add('active');
-    document.getElementById('panel-' + btn.dataset.tab).classList.remove('hidden');
-  });
-});
-
-function setSyncStatus(status) {
-  syncStatus = status;
-  const label = document.getElementById('syncLabel');
-  const indicator = document.getElementById('statusIndicator');
-  
-  const map = { 'no-url': t('syncNoUrl'), 'syncing': t('syncSyncing'), 'ok': t('syncOk'), 'error': t('syncError') };
-  label.textContent = map[status] || '';
-
-  // Dynamic Indicator Class Switcher
-  indicator.className = 'status-dot-container';
-  if (status === 'ok') indicator.classList.add('status-synced');
-  else if (status === 'syncing') indicator.classList.add('status-syncing');
-  else if (status === 'error') indicator.classList.add('status-error');
-  else indicator.classList.add('status-no-url');
-
-  renderSettings();
-}
-
-async function fetchFromSheet() {
-  if (!scriptUrl) { setSyncStatus('no-url'); return; }
-  setSyncStatus('syncing');
-  try {
-    const r = await fetch(scriptUrl);
-    const json = await r.json();
-    data = json;
-    setSyncStatus('ok');
-    renderAll();
-  } catch (e) {
-    setSyncStatus('error');
-  }
-}
-
-async function pushAction(action) {
-  if (!scriptUrl) return false;
-  setSyncStatus('syncing');
-  try {
-    await fetch(scriptUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(action),
-    });
-    await fetchFromSheet();
-    return true;
-  } catch (e) {
-    setSyncStatus('error');
-    return false;
-  }
-}
-
-function renderAll() {
-  applyStaticText();
-  renderDashboard();
-  renderProduction();
-  renderSingeing();
-  renderLifetime();
-  renderSettings();
-}
-
-function emptyNotice() {
-  return `<div class="glass-card p-12 text-center text-slate-700 font-semibold text-sm my-6 border-dashed border-2 border-white/60">${t('emptyNotice')}</div>`;
-}
-
-function plMarkup(v) {
-  const n = Number(v) || 0;
-  const isPos = n >= 0;
-  const colorClass = isPos ? 'text-finGreen-600' : 'text-finRed-600';
-  const bgBadge = isPos ? 'bg-emerald-50/90 border-emerald-300' : 'bg-rose-50/90 border-rose-300';
-  return `<div class="inline-flex items-center gap-1.5 font-extrabold ${colorClass} px-3.5 py-1.5 rounded-full text-sm border ${bgBadge} shadow-sm backdrop-blur-md">
-            <span class="inline-block w-2 h-2 rounded-full ${isPos ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
-            ${fmtBDT(n)}
-          </div>`;
-}
-
-function renderDashboard() {
-  const el = document.getElementById('panel-dashboard');
-  if (!data) { el.innerHTML = emptyNotice(); return; }
-
-  const sum = (arr, key) => arr.reduce((s, x) => s + (Number(x[key]) || 0), 0);
-  const p24 = sum(data.weeks, 'totalProfit');
-  const p4 = sum(data.weeks, 'myProfit');
-  const p2 = sum(data.weeks, 'twoMachineProfit');
-  const singeingIncome = sum(data.singeing, 'pay');
-  const combined = sum(data.weeks, 'combinedProfit');
-  const lifetimeRows = data.lifetime.filter(r => r.profitLossLifetime !== '');
-  const last = lifetimeRows.slice(-1)[0];
-  const yearLabel = last ? last.year : '—';
-  const yearPL = last ? last.profitLossYear : 0;
-  const lifetimePL = last ? last.profitLossLifetime : 0;
-
-  el.innerHTML = `
-    <div class="space-y-6">
-      <!-- Section 1: Hero Fintech Card -->
-      <div class="fintech-hero text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden">
-        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-          <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')}</h2>
-          <span class="text-[10px] font-extrabold tracking-widest text-amber-300 bg-amber-950/80 border border-amber-500/40 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tag24_4_2')}</span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl shadow-inner">
-            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">${t('label24')}</div>
-            <div class="text-2xl font-black text-slate-100 tracking-tight">${fmtBDT(p24)}</div>
-          </div>
-          <div class="bg-emerald-500/10 backdrop-blur-md border border-emerald-500/30 p-5 rounded-2xl relative shadow-inner">
-            <div class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider mb-1">${t('label4')}</div>
-            <div class="text-2xl font-black text-emerald-300 tracking-tight">${fmtBDT(p4)}</div>
-            <span class="absolute top-3 right-3 text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded font-extrabold backdrop-blur-md">MY SHARE</span>
-          </div>
-          <div class="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl shadow-inner">
-            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">${t('label2')}</div>
-            <div class="text-2xl font-black text-slate-100 tracking-tight">${fmtBDT(p2)}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 2: Combined Statements -->
-      <div class="glass-card overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-200/60 flex justify-between items-center bg-white/40">
-          <h2 class="font-bold text-brand-900 text-base tracking-tight">${t('overallTitle')}</h2>
-          <span class="text-[10px] font-extrabold tracking-wider text-amber-800 bg-amber-100/80 border border-amber-300 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tagCombined')}</span>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200/60">
-          <div class="p-6">
-            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">${t('labelSingeingIncome')}</div>
-            <div class="text-xl font-black text-luxuryGold-600">${fmtBDT(singeingIncome)}</div>
-          </div>
-          <div class="p-6">
-            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">${t('labelCombinedIncome')}</div>
-            <div class="text-xl font-black text-finGreen-600">${fmtBDT(combined)}</div>
-          </div>
-          <div class="p-6">
-            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">${t('labelYearPL', yearLabel)}</div>
-            <div>${plMarkup(yearPL)}</div>
-          </div>
-          <div class="p-6">
-            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">${t('labelLifetimePL')}</div>
-            <div>${plMarkup(lifetimePL)}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 3: Business Assumptions -->
-      <div class="glass-card p-6 border-l-4 border-l-brand-600">
-        <div class="flex items-center gap-2 mb-1">
-          <h3 class="font-bold text-brand-900 text-base">${t('assumpTitle')}</h3>
-        </div>
-        <p class="text-xs text-slate-600 mb-5 font-medium">${t('assumpDesc')}</p>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-2">${t('assumpMarket')}</label>
-            <input class="input-field w-full text-sm font-bold text-brand-900" id="assump-market" type="number" value="${data.assumptions.marketRate}" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-2">${t('assumpMachines')}</label>
-            <input class="input-field w-full text-sm font-bold text-brand-900" id="assump-machines" type="number" value="${data.assumptions.totalMachines}" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-2">${t('assumpSingeing')}</label>
-            <input class="input-field w-full text-sm font-bold text-brand-900" id="assump-singeing" type="number" value="${data.assumptions.singeingRate}" />
-          </div>
-        </div>
-        <button class="glass-btn-primary font-bold text-xs py-3 px-6 rounded-xl" onclick="saveAssumptions()">${t('btnSaveAssump')}</button>
-      </div>
-    </div>`;
-}
-
-async function saveAssumptions() {
-  const marketRate = Number(document.getElementById('assump-market').value) || 0;
-  const totalMachines = Number(document.getElementById('assump-machines').value) || 0;
-  const singeingRate = Number(document.getElementById('assump-singeing').value) || 0;
-  await pushAction({ action: 'updateAssumptions', marketRate, totalMachines, singeingRate });
-}
-
-function renderProduction() {
-  const el = document.getElementById('panel-production');
-  if (!data) { el.innerHTML = emptyNotice(); return; }
-  el.innerHTML = `<div class="space-y-4">` + data.weeks.map((w, i) => `
-    <div class="glass-card p-6 border-l-4 border-l-brand-900 hover:border-l-brand-600 transition">
-      <div class="flex justify-between items-center mb-4">
-        <div class="font-bold text-brand-900 text-base">${t('weekLabel', w.week)}</div>
-        <span class="text-[10px] font-extrabold uppercase bg-slate-200/80 backdrop-blur-md text-slate-700 px-3 py-1 rounded-md">WEEKLY LOG</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">তারিখ (Date)</label>
-          <input class="input-field text-sm font-semibold w-full" id="prod-date-${i}" placeholder="${t('datePlaceholder')}" value="${w.date || ''}" />
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">মোট পিস (Total Pieces)</label>
-          <input class="input-field text-sm font-semibold w-full" id="prod-pieces-${i}" type="number" placeholder="${t('piecesPlaceholder')}" value="${w.totalPieces || ''}" />
-        </div>
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs mb-5 bg-white/50 backdrop-blur-md p-4 rounded-xl border border-slate-200/60">
-        <div><span class="text-slate-500 block text-[10px] uppercase font-bold">${t('statThaan')}</span> <b class="text-brand-900 text-sm font-extrabold">${w.weeklyThaan}</b></div>
-        <div><span class="text-slate-500 block text-[10px] uppercase font-bold">${t('statTotalProfit')}</span> <b class="text-brand-900 text-sm font-extrabold">${fmtBDT(w.totalProfit)}</b></div>
-        <div><span class="text-slate-500 block text-[10px] uppercase font-bold">${t('statMyProfit')}</span> <b class="text-finGreen-600 text-sm font-extrabold">${fmtBDT(w.myProfit)}</b></div>
-        <div><span class="text-slate-500 block text-[10px] uppercase font-bold">${t('stat2Machine')}</span> <b class="text-brand-900 text-sm font-extrabold">${fmtBDT(w.twoMachineProfit)}</b></div>
-        <div><span class="text-slate-500 block text-[10px] uppercase font-bold">${t('statCombined')}</span> <b class="text-finGreen-600 text-sm font-extrabold">${fmtBDT(w.combinedProfit)}</b></div>
-      </div>
-      <button class="w-full glass-btn-primary font-bold text-xs py-3 rounded-xl" onclick="saveWeek(${i})">${t('btnSaveSheet')}</button>
-    </div>
-  `).join('') + `</div>`;
-}
-
-async function saveWeek(i) {
-  const date = document.getElementById('prod-date-' + i).value;
-  const totalPieces = Number(document.getElementById('prod-pieces-' + i).value) || 0;
-  await pushAction({ action: 'updateWeek', weekIndex: i + 1, date, totalPieces });
-}
-
-function renderSingeing() {
-  const el = document.getElementById('panel-singeing');
-  if (!data) { el.innerHTML = emptyNotice(); return; }
-  el.innerHTML = `<div class="space-y-3">` + data.singeing.map((s, i) => `
-    <div class="glass-card p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <div class="font-bold text-brand-900 text-base">${t('weekLabel', s.week)}</div>
-        <div class="text-xs text-slate-600 font-medium mt-0.5">${s.date} · ${t('payLabel')} <span class="font-extrabold text-brand-900">${fmtBDT(s.pay)}</span></div>
-      </div>
-      <div class="flex gap-3 w-full sm:w-auto">
-        <input class="input-field text-sm font-bold w-full sm:w-36" id="sing-${i}" type="number" placeholder="${t('singedPlaceholder')}" value="${s.singedThaan || ''}" />
-        <button class="glass-btn-primary font-bold text-xs px-6 py-2.5 rounded-xl whitespace-nowrap" onclick="saveSingeing(${i})">${t('btnSave')}</button>
-      </div>
-    </div>
-  `).join('') + `</div>`;
-}
-
-async function saveSingeing(i) {
-  const singedThaan = Number(document.getElementById('sing-' + i).value) || 0;
-  await pushAction({ action: 'updateSingeing', weekIndex: i + 1, singedThaan });
-}
-
-const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-function renderLifetime() {
-  const el = document.getElementById('panel-lifetime');
-  if (!data) { el.innerHTML = emptyNotice(); return; }
-
-  const now = new Date();
-  const curYear = now.getFullYear();
-  const curMonthName = MONTH_NAMES[now.getMonth()];
-  const curIndex = data.lifetime.findIndex(r => Number(r.year) === curYear && r.month === curMonthName);
-  const cur = curIndex >= 0 ? data.lifetime[curIndex] : null;
-
-  const currentCardHtml = cur ? `
-    <div class="glass-card overflow-hidden mb-6 border-2 border-brand-600/30">
-      <div class="px-6 py-4 border-b border-slate-200/60 flex justify-between items-center bg-white/40">
-        <h2 class="font-bold text-brand-900 text-base">${t('curEntryTitle', cur.month, cur.year)}</h2>
-        <span class="text-[10px] font-extrabold tracking-wider text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tagCurMonth')}</span>
-      </div>
-      <div class="p-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-2">${t('labelInvestment')}</label>
-            <input class="input-field w-full text-sm font-bold text-brand-900" id="life-cur-inv" type="number" value="${cur.investment || ''}" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-2">${t('labelMonthlyIncome')}</label>
-            <input class="input-field w-full text-sm font-bold text-brand-900" id="life-cur-inc" type="number" value="${cur.monthlyIncome || ''}" />
-          </div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600 mb-5 bg-white/50 backdrop-blur-md p-4 rounded-xl border border-slate-200/60 font-medium">
-          <div>${t('statYearCum')} <b class="text-brand-900 block text-sm font-extrabold mt-0.5">${fmtBDT(cur.cumIncomeYear)}</b></div>
-          <div>${t('statYearPL')} <b class="${Number(cur.profitLossYear) >= 0 ? 'text-finGreen-600' : 'text-finRed-600'} block text-sm font-extrabold mt-0.5">${fmtBDT(cur.profitLossYear)}</b></div>
-          <div>${t('statLifetimePL')} <b class="${Number(cur.profitLossLifetime) >= 0 ? 'text-finGreen-600' : 'text-finRed-600'} block text-sm font-extrabold mt-0.5">${fmtBDT(cur.profitLossLifetime)}</b></div>
-        </div>
-        <button class="w-full glass-btn-primary font-bold text-xs py-3 rounded-xl" onclick="saveCurrentLifetime(${curIndex})">${t('btnSaveSheet')}</button>
-      </div>
-    </div>` : `<div class="glass-card p-6 text-center text-slate-600 text-sm mb-6">${t('notFoundMonth', curMonthName, curYear)}</div>`;
-
-  const yearRows = data.lifetime.filter(r => Number(r.year) === curYear);
-  const yearTableRows = yearRows.map(r => `
-    <tr class="hover:bg-white/40 transition border-b border-slate-200/60">
-      <td class="py-3.5 px-4 font-bold text-brand-900">${r.month}</td>
-      <td class="py-3.5 px-4 text-right text-slate-700 font-medium">${r.investment !== '' ? fmtBDT(r.investment) : '—'}</td>
-      <td class="py-3.5 px-4 text-right text-slate-700 font-medium">${r.monthlyIncome !== '' ? fmtBDT(r.monthlyIncome) : '—'}</td>
-      <td class="py-3.5 px-4 text-right font-bold ${r.profitLossYear !== '' && Number(r.profitLossYear) >= 0 ? 'text-finGreen-600' : (r.profitLossYear !== '' ? 'text-finRed-600' : 'text-slate-400')}">${r.profitLossYear !== '' ? fmtBDT(r.profitLossYear) : '—'}</td>
-    </tr>`).join('');
-
-  const byYear = {};
-  data.lifetime.forEach(r => { if (r.profitLossLifetime !== '') byYear[r.year] = r; });
-  const yearlySummaryRows = Object.keys(byYear).sort().map(y => {
-    const r = byYear[y];
-    return `<tr class="hover:bg-white/40 transition border-b border-slate-200/60">
-      <td class="py-3.5 px-4 font-bold text-brand-900">${y}</td>
-      <td class="py-3.5 px-4 text-right text-slate-700 font-medium">${fmtBDT(r.cumInvestLifetime)}</td>
-      <td class="py-3.5 px-4 text-right text-slate-700 font-medium">${fmtBDT(r.cumIncomeLifetime)}</td>
-      <td class="py-3.5 px-4 text-right font-bold ${Number(r.profitLossLifetime) >= 0 ? 'text-finGreen-600' : 'text-finRed-600'}">${fmtBDT(r.profitLossLifetime)}</td>
-    </tr>`;
-  }).join('');
-
-  el.innerHTML = currentCardHtml + `
-    <div class="space-y-6">
-      <div class="glass-card overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-200/60 flex justify-between items-center bg-white/40">
-          <h2 class="font-bold text-brand-900 text-sm tracking-wide uppercase">${t('yearTableTitle', curYear)}</h2>
-          <span class="text-[10px] font-extrabold tracking-wider text-slate-600 bg-slate-200/80 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tagViewOnly')}</span>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-xs text-left">
-            <thead class="bg-white/60 text-slate-600 font-extrabold uppercase tracking-wider text-[10px] border-b border-slate-200/60">
-              <tr>
-                <th class="py-3 px-4">${t('colMonth')}</th>
-                <th class="py-3 px-4 text-right">${t('colInvest')}</th>
-                <th class="py-3 px-4 text-right">${t('colIncome')}</th>
-                <th class="py-3 px-4 text-right">${t('colPL')}</th>
-              </tr>
-            </thead>
-            <tbody>${yearTableRows}</tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="glass-card overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-200/60 flex justify-between items-center bg-white/40">
-          <h2 class="font-bold text-brand-900 text-sm tracking-wide uppercase">${t('yearlySummaryTitle')}</h2>
-          <span class="text-[10px] font-extrabold tracking-wider text-slate-600 bg-slate-200/80 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tagRange')}</span>
-        </div>
-        <div class="overflow-x-auto max-h-72">
-          <table class="w-full text-xs text-left">
-            <thead class="bg-white/80 text-slate-600 font-extrabold uppercase tracking-wider text-[10px] border-b border-slate-200/60 sticky top-0 z-10 backdrop-blur-md">
-              <tr>
-                <th class="py-3 px-4 bg-white/80">${t('colYear')}</th>
-                <th class="py-3 px-4 text-right bg-white/80">${t('colTotalInvest')}</th>
-                <th class="py-3 px-4 text-right bg-white/80">${t('colTotalIncome')}</th>
-                <th class="py-3 px-4 text-right bg-white/80">${t('colLifetimePL')}</th>
-              </tr>
-            </thead>
-            <tbody>${yearlySummaryRows}</tbody>
-          </table>
-        </div>
-      </div>
-    </div>`;
-}
-
-async function saveCurrentLifetime(i) {
-  const investment = Number(document.getElementById('life-cur-inv').value) || 0;
-  const monthlyIncome = Number(document.getElementById('life-cur-inc').value) || 0;
-  const year = data.lifetime[i].year;
-  const month = data.lifetime[i].month;
-  await pushAction({ action: 'updateLifetimeMonth', year, month, investment, monthlyIncome });
-}
-
-function renderSettings() {
-  const el = document.getElementById('panel-settings');
-  const msgMap = {
-    'ok': '<span class="text-finGreen-600 font-bold flex items-center gap-1 mt-3 text-xs">' + t('syncMsgOk') + '</span>',
-    'error': '<span class="text-finRed-600 font-bold flex items-center gap-1 mt-3 text-xs">' + t('syncMsgError') + '</span>',
-    'syncing': '<span class="text-brand-600 font-bold flex items-center gap-1 mt-3 text-xs">' + t('syncMsgSyncing') + '</span>',
-    'no-url': '<span class="text-slate-500 font-medium flex items-center gap-1 mt-3 text-xs">' + t('syncMsgNoUrl') + '</span>'
-  };
-
-  el.innerHTML = `
-    <div class="space-y-6">
-      <div class="glass-card p-6 border-l-4 border-l-brand-900">
-        <h2 class="font-bold text-brand-900 text-base mb-1">${t('settingsTitle')}</h2>
-        <p class="text-xs text-slate-600 mb-4 font-medium">${t('settingsDesc')}</p>
-        <div class="mb-4">
-          <input class="input-field w-full text-xs font-mono text-brand-900" id="settings-url" placeholder="${t('urlPlaceholder')}" value="${scriptUrl}" />
-          ${msgMap[syncStatus] || ''}
-        </div>
-        <button class="glass-btn-primary font-bold text-xs py-3 px-6 rounded-xl" onclick="saveSettings()">${t('btnSaveSettings')}</button>
-      </div>
-
-      <div class="glass-card p-6 border-l-4 border-l-luxuryGold-500">
-        <h2 class="font-bold text-brand-900 text-base mb-1">${t('languageTitle')}</h2>
-        <p class="text-xs text-slate-600 mb-4 font-medium">${t('languageDesc')}</p>
-        <div class="flex gap-3">
-          <button class="px-5 py-2.5 rounded-xl text-xs font-bold transition ${lang === 'bn' ? 'glass-btn-primary' : 'bg-white/60 text-slate-700 border border-slate-200 hover:bg-white/90'}" onclick="setLanguage('bn')">${t('langBangla')}</button>
-          <button class="px-5 py-2.5 rounded-xl text-xs font-bold transition ${lang === 'en' ? 'glass-btn-primary' : 'bg-white/60 text-slate-700 border border-slate-200 hover:bg-white/90'}" onclick="setLanguage('en')">${t('langEnglish')}</button>
-        </div>
-      </div>
-    </div>`;
-}
-
-function saveSettings() {
-  const val = document.getElementById('settings-url').value.trim();
-  scriptUrl = val;
-  localStorage.setItem('appsScriptUrl', val);
-  fetchFromSheet();
-}
-
-function setLanguage(l) {
-  lang = l;
-  localStorage.setItem('appLang', l);
-  renderAll();
-}
-
-// Initial Kickoff
-applyStaticText();
-renderSettings();
-if (scriptUrl) {
-  fetchFromSheet();
-} else {
-  renderAll();
-}
+    // পেজ লোড হওয়ার সাথে সাথে রন করবে
+    window.onload = function() {
+        setAutomaticMonth();
+        calculateTotal();
+    };
 </script>
+
 </body>
 </html>
