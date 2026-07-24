@@ -73,23 +73,23 @@
     box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
   }
 
-  /* Navigation Bar Glass Effect Buttons */
+  /* Menu Navigation Buttons Glass Effect */
   .glass-nav-btn {
     background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: #cbd5e1;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
 
   .glass-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.3);
     color: #ffffff;
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
   }
 
   .glass-nav-btn.active {
@@ -99,8 +99,100 @@
     border-color: rgba(255, 255, 255, 0.9);
     color: #0b1329;
     font-weight: 800;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 1);
     transform: translateY(-1px);
+  }
+
+  /* Synchronize Button Glass Effect */
+  .glass-btn-sync {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-btn-sync:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Ultra-Premium Glass Notification Light LED */
+  .status-dot-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+  }
+
+  .status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    position: relative;
+    z-index: 2;
+    transition: all 0.4s ease;
+  }
+
+  .status-pulse-ring {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0.75;
+    animation: glassGlowPulse 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* State 1: Online / Synced (Neon Emerald Glass) */
+  .status-synced .status-dot {
+    background: radial-gradient(circle at 35% 35%, #ffffff, #10b981 65%, #047857);
+    box-shadow: 0 0 12px #10b981, inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+  .status-synced .status-pulse-ring {
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.45) 0%, rgba(16, 185, 129, 0) 70%);
+  }
+
+  /* State 2: Syncing (Amber Amber Glass) */
+  .status-syncing .status-dot {
+    background: radial-gradient(circle at 35% 35%, #ffffff, #f59e0b 65%, #b45309);
+    box-shadow: 0 0 12px #f59e0b, inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+  .status-syncing .status-pulse-ring {
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.5) 0%, rgba(245, 158, 11, 0) 70%);
+    animation-duration: 1.2s; /* Faster spin pulse for active sync */
+  }
+
+  /* State 3: Error / Unlinked (Crimson Red Glass) */
+  .status-error .status-dot, .status-no-url .status-dot {
+    background: radial-gradient(circle at 35% 35%, #ffffff, #ef4444 65%, #991b1b);
+    box-shadow: 0 0 12px #ef4444, inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+  .status-error .status-pulse-ring, .status-no-url .status-pulse-ring {
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.45) 0%, rgba(239, 68, 68, 0) 70%);
+  }
+
+  @keyframes glassGlowPulse {
+    0% {
+      transform: scale(0.7);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1.4);
+      opacity: 0.2;
+    }
+    100% {
+      transform: scale(0.7);
+      opacity: 0.8;
+    }
   }
 
   /* Action Buttons Glass Effect */
@@ -118,21 +210,6 @@
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(37, 99, 235, 1));
     box-shadow: 0 12px 25px rgba(37, 99, 235, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
     transform: translateY(-1.5px);
-  }
-
-  .glass-btn-sync {
-    background: rgba(17, 28, 58, 0.65);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transition: all 0.25s ease;
-  }
-
-  .glass-btn-sync:hover {
-    background: rgba(30, 41, 59, 0.85);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
   .fintech-hero {
@@ -185,14 +262,18 @@
       </div>
     </div>
     
-    <button id="syncBtn" onclick="fetchFromSheet()" class="glass-btn-sync text-slate-200 rounded-full px-4 py-2 text-xs font-semibold flex items-center gap-2">
-      <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+    <!-- Ultra Premium Glass Sync Button & Indicator -->
+    <button id="syncBtn" onclick="fetchFromSheet()" class="glass-btn-sync text-slate-100 rounded-2xl px-4 py-2 text-xs font-bold flex items-center gap-3">
+      <div class="status-dot-container status-no-url" id="statusIndicator">
+        <div class="status-pulse-ring"></div>
+        <div class="status-dot"></div>
+      </div>
       <span id="syncLabel"></span>
     </button>
   </div>
 </header>
 
-<!-- Navigation Bar with High-End Frosted Glass Effect -->
+<!-- Navigation Bar with High-End Frosted Glass Effect Buttons -->
 <div class="bg-brand-950/60 backdrop-blur-2xl border-b border-white/10 sticky top-[69px] z-40 py-2.5 shadow-xl">
   <nav class="max-w-5xl mx-auto px-4 flex gap-2 overflow-x-auto no-scrollbar">
     <button class="glass-nav-btn nav-tab px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap active" data-tab="dashboard"></button>
@@ -236,7 +317,7 @@ const I18N = {
     payLabel: 'বিল:', singedPlaceholder: 'সিঙড থান', btnSave: 'সেভ',
     curEntryTitle: (m, y) => m + ' ' + y + ' — এই মাসের স্টেটমেন্ট', tagCurMonth: 'চলতি মাস',
     labelInvestment: 'ইনভেস্টমেন্ট (৳)', labelMonthlyIncome: 'মান্থলি ইনকাম (৳)',
-    statYearCum: 'এ বছর কিউমুলেটিভ:', statYearPL: 'এ বছর লাভ/ক্ষতি:', statLifetimePL: 'লাইফটাইম লাভ/ক্ষতি:',
+    statYearCum: 'এ বছর কিউমুলেティブ:', statYearPL: 'এ বছর লাভ/ক্ষতি:', statLifetimePL: 'লাইফটাইম লাভ/ক্ষতি:',
     notFoundMonth: (m, y) => m + ' ' + y + ' শীটে খুঁজে পাওয়া যায়নি।',
     yearTableTitle: (y) => y + ' সালের মাসভিত্তিক বিবরণী', tagViewOnly: 'ভিউ অনলি',
     colMonth: 'মাস', colInvest: 'ইনভেস্ট', colIncome: 'ইনকাম', colPL: 'লাভ/ক্ষতি',
@@ -327,8 +408,18 @@ document.querySelectorAll('.nav-tab').forEach(btn => {
 function setSyncStatus(status) {
   syncStatus = status;
   const label = document.getElementById('syncLabel');
+  const indicator = document.getElementById('statusIndicator');
+  
   const map = { 'no-url': t('syncNoUrl'), 'syncing': t('syncSyncing'), 'ok': t('syncOk'), 'error': t('syncError') };
   label.textContent = map[status] || '';
+
+  // Dynamic Indicator Class Switcher
+  indicator.className = 'status-dot-container';
+  if (status === 'ok') indicator.classList.add('status-synced');
+  else if (status === 'syncing') indicator.classList.add('status-syncing');
+  else if (status === 'error') indicator.classList.add('status-error');
+  else indicator.classList.add('status-no-url');
+
   renderSettings();
 }
 
