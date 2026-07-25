@@ -423,14 +423,19 @@ function plMarkup(v) {
           </div>`;
 }
 
-function liveBadge() {
-  return `<span class="relative inline-flex items-center gap-1.5 text-[10px] font-extrabold tracking-widest text-white bg-gradient-to-r from-red-600 to-red-500 px-3 py-1.5 rounded-full uppercase live-badge-glow">
-            <span class="relative flex h-2 w-2">
+function liveBadge(size) {
+  const big = size === 'lg';
+  const pad = big ? 'px-4 py-2' : 'px-3 py-1.5';
+  const textSize = big ? 'text-xs' : 'text-[10px]';
+  const dotSize = big ? 'h-2.5 w-2.5' : 'h-2 w-2';
+  const iconBox = big ? 'w-5 h-5 -top-2.5 -right-2.5' : 'w-4 h-4 -top-2 -right-2';
+  return `<span class="relative inline-flex items-center gap-2 ${textSize} font-extrabold tracking-widest text-white bg-gradient-to-r from-red-600 to-red-500 ${pad} rounded-full uppercase live-badge-glow">
+            <span class="relative flex ${dotSize}">
               <span class="live-fast-ping absolute inline-flex h-full w-full rounded-full bg-red-200 opacity-90"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              <span class="relative inline-flex rounded-full ${dotSize} bg-white"></span>
             </span>
             LIVE
-            <span class="absolute -top-2 -right-2 bg-white text-red-600 rounded-full w-4 h-4 flex items-end justify-center gap-[1.5px] px-0.5 pb-0.5 shadow-md border border-red-200">
+            <span class="absolute ${iconBox} bg-white text-red-600 rounded-full flex items-end justify-center gap-[1.5px] px-0.5 pb-0.5 shadow-md border border-red-200">
               <span class="signal-bar-1 w-[2px] h-[3px] bg-red-600 rounded-sm"></span>
               <span class="signal-bar-2 w-[2px] h-[5px] bg-red-600 rounded-sm"></span>
               <span class="signal-bar-3 w-[2px] h-[7px] bg-red-600 rounded-sm"></span>
@@ -459,7 +464,7 @@ function renderDashboard() {
       <div class="fintech-hero text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden">
         <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
           <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')} ${getCurrentMonthName()}</h2>
-          <span class="text-[10px] font-extrabold tracking-widest text-amber-300 bg-amber-950/80 border border-amber-500/40 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tag24_4_2')}</span>
+          ${liveBadge('lg')}
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
