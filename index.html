@@ -204,28 +204,16 @@
     animation: shine-sweep 3.2s linear infinite;
   }
 
-  @keyframes flip-loop {
-    0%   { transform: perspective(500px) rotateX(90deg); opacity: 0; }
-    6%   { transform: perspective(500px) rotateX(-12deg); opacity: 1; }
-    10%  { transform: perspective(500px) rotateX(6deg); }
-    14%  { transform: perspective(500px) rotateX(0deg); }
-    88%  { transform: perspective(500px) rotateX(0deg); opacity: 1; }
-    100% { transform: perspective(500px) rotateX(90deg); opacity: 0; }
+  @keyframes glow-pulse {
+    0%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.3), 0 0 12px rgba(96,165,250,0.2); }
+    50%      { text-shadow: 0 0 16px rgba(255,255,255,0.7), 0 0 30px rgba(96,165,250,0.45); }
   }
-  .month-flip-wrap {
+  .month-glow {
     display: inline-block;
-    perspective: 500px;
-  }
-  .month-flip {
-    display: inline-block;
-    transform-origin: 50% 0%;
-    background: #0f172a;
-    color: #fde68a;
-    padding: 2px 10px;
-    border-radius: 6px;
-    border: 1px solid rgba(245,158,11,0.4);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
-    animation: flip-loop 4.5s cubic-bezier(0.25,0.9,0.35,1) infinite;
+    color: #f8fafc;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    animation: glow-pulse 2.8s ease-in-out infinite;
   }
 </style>
 </head>
@@ -278,7 +266,7 @@ const I18N = {
     syncNoUrl: 'শীট লিংক সেট করুন', syncSyncing: 'সিঙ্ক হচ্ছে...', syncOk: 'অনলাইন সিঙ্কড', syncError: 'সিঙ্ক ব্যর্থ',
     emptyNotice: 'শীটের সাথে এখনো সিঙ্ক হয়নি। "সেটিংস" ট্যাবে গিয়ে Google Apps Script লিংকটি দিন।',
     prodCardTitle: 'প্রোডাকশন প্রফিট —', tag24_4_2: '২৪ / ৪ / ২ মেশিন',
-    label24: '২৪ মেশিন (ফ্যাক্টরি টোটাল)', label4: '৪ মেশিন (আমার ভাগ)', label2: '২ মেশিন',
+    label24: '২৪ মেশিন (ফ্যাক্টরি টোটাল)', label4: '৪ মেশিন', label2: '২ মেশিন',
     overallTitle: 'সামগ্রিক আয় ও লাভ-ক্ষতি বিবরণী', tagCombined: 'কম্বাইন্ড ব্যালেন্স',
     labelSingeingIncome: (m) => 'সিঙ্গিং ইনকাম (' + m + ')', labelCombinedIncome: 'কম্বাইন্ড ইনকাম (৪+২+সিঙ্গিং)',
     labelYearPL: (y) => y + ' সালের লাভ/ক্ষতি', labelLifetimePL: 'লাইফটাইম নেট প্রফিট',
@@ -315,7 +303,7 @@ const I18N = {
     syncNoUrl: 'Set sheet link', syncSyncing: 'Syncing...', syncOk: 'Online Synced', syncError: 'Sync failed',
     emptyNotice: 'Not synced with the sheet yet. Go to "Settings" and enter the Apps Script link.',
     prodCardTitle: 'Production Profit —', tag24_4_2: '24 / 4 / 2 Machines',
-    label24: '24 Machines (Factory Total)', label4: '4 Machines (My Share)', label2: '2 Machines',
+    label24: '24 Machines (Factory Total)', label4: '4 Machines', label2: '2 Machines',
     overallTitle: 'Overall Financial Statement', tagCombined: 'Combined Balance',
     labelSingeingIncome: (m) => 'Singeing Income (' + m + ')', labelCombinedIncome: 'Combined Income (4+2+Singeing)',
     labelYearPL: (y) => y + ' Profit/Loss', labelLifetimePL: 'Lifetime Net Profit',
@@ -500,7 +488,7 @@ function renderDashboard() {
     <div class="space-y-6">
       <div class="fintech-hero text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden">
         <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-          <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')} <span class="month-flip-wrap"><span class="month-flip">${getCurrentMonthName()}</span></span></h2>
+          <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')} <span class="month-glow">${getCurrentMonthName()}</span></h2>
           ${liveBadge('lg')}
         </div>
 
