@@ -203,6 +203,30 @@
     color: transparent;
     animation: shine-sweep 3.2s linear infinite;
   }
+
+  @keyframes flip-loop {
+    0%   { transform: perspective(500px) rotateX(90deg); opacity: 0; }
+    6%   { transform: perspective(500px) rotateX(-12deg); opacity: 1; }
+    10%  { transform: perspective(500px) rotateX(6deg); }
+    14%  { transform: perspective(500px) rotateX(0deg); }
+    88%  { transform: perspective(500px) rotateX(0deg); opacity: 1; }
+    100% { transform: perspective(500px) rotateX(90deg); opacity: 0; }
+  }
+  .month-flip-wrap {
+    display: inline-block;
+    perspective: 500px;
+  }
+  .month-flip {
+    display: inline-block;
+    transform-origin: 50% 0%;
+    background: #0f172a;
+    color: #fde68a;
+    padding: 2px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(245,158,11,0.4);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+    animation: flip-loop 4.5s cubic-bezier(0.25,0.9,0.35,1) infinite;
+  }
 </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans">
@@ -476,7 +500,7 @@ function renderDashboard() {
     <div class="space-y-6">
       <div class="fintech-hero text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden">
         <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-          <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')} <span class="month-shine font-extrabold">${getCurrentMonthName()}</span></h2>
+          <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')} <span class="month-flip-wrap"><span class="month-flip">${getCurrentMonthName()}</span></span></h2>
           ${liveBadge('lg')}
         </div>
 
