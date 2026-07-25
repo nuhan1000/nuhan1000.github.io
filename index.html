@@ -23,10 +23,10 @@
         colors: {
           brand: {
             950: '#030712',
-            900: '#0b1329', // Executive Navy
+            900: '#0b1329',
             800: '#111c3a',
             700: '#1e293b',
-            600: '#2563eb', // Royal Blue Primary
+            600: '#2563eb',
             500: '#3b82f6',
             100: '#dbeafe',
             50: '#f8fafc',
@@ -69,7 +69,6 @@
     background-attachment: fixed;
   }
 
-  /* Universal Glassmorphism Classes */
   .glass-card {
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(16px);
@@ -79,7 +78,6 @@
     box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
   }
 
-  /* Navigation Bar Glass Effect Buttons */
   .glass-nav-btn {
     background: rgba(255, 255, 255, 0.07);
     backdrop-filter: blur(12px);
@@ -109,7 +107,6 @@
     transform: translateY(-1px);
   }
 
-  /* Action Buttons Glass Effect */
   .glass-btn-primary {
     background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(29, 78, 216, 0.95));
     backdrop-filter: blur(10px);
@@ -177,7 +174,6 @@
 </head>
 <body class="min-h-screen flex flex-col font-sans">
 
-<!-- Corporate Top Header with Frost Effect -->
 <header class="bg-brand-950/80 backdrop-blur-xl text-white border-b border-white/10 sticky top-0 z-50 shadow-2xl">
   <div class="max-w-5xl mx-auto px-4 py-3.5 flex justify-between items-center">
     <div class="flex items-center gap-3.5">
@@ -188,14 +184,16 @@
       </div>
     </div>
     
-    <button id="syncBtn" onclick="fetchFromSheet()" class="glass-btn-sync text-slate-200 rounded-full px-4 py-2 text-xs font-semibold flex items-center gap-2">
-      <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+    <button id="syncBtn" onclick="fetchFromSheet()" class="rounded-full px-4 py-2 text-xs font-bold flex items-center gap-2 shadow-lg transition">
+      <span class="relative flex h-2.5 w-2.5">
+        <span id="syncDotPing" class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"></span>
+        <span id="syncDot" class="relative inline-flex rounded-full h-2.5 w-2.5"></span>
+      </span>
       <span id="syncLabel"></span>
     </button>
   </div>
 </header>
 
-<!-- Navigation Bar with High-End Frosted Glass Effect -->
 <div class="bg-brand-950/60 backdrop-blur-2xl border-b border-white/10 sticky top-[69px] z-40 py-2.5 shadow-xl">
   <nav class="max-w-5xl mx-auto px-4 flex gap-2 overflow-x-auto no-scrollbar">
     <button class="glass-nav-btn nav-tab px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap active" data-tab="dashboard"></button>
@@ -206,7 +204,6 @@
   </nav>
 </div>
 
-<!-- Main Body Area -->
 <main class="max-w-5xl mx-auto px-4 py-6 flex-1 w-full">
   <div class="panel block" id="panel-dashboard"></div>
   <div class="panel hidden" id="panel-production"></div>
@@ -327,11 +324,27 @@ document.querySelectorAll('.nav-tab').forEach(btn => {
   });
 });
 
+const SYNC_BTN_STYLES = {
+  'syncing': { btn: 'bg-red-700 hover:bg-red-600 border border-red-400/50 text-white shadow-red-950/50', dot: 'bg-red-200', ping: 'bg-red-200' },
+  'error':   { btn: 'bg-red-700 hover:bg-red-600 border border-red-400/50 text-white shadow-red-950/50', dot: 'bg-red-200', ping: 'bg-red-200' },
+  'ok':      { btn: 'bg-emerald-800 hover:bg-emerald-700 border border-emerald-500/40 text-white shadow-emerald-950/50', dot: 'bg-emerald-300', ping: 'bg-emerald-300' },
+  'no-url':  { btn: 'bg-slate-700 hover:bg-slate-600 border border-slate-400/40 text-white shadow-slate-950/50', dot: 'bg-slate-300', ping: 'bg-slate-300' },
+};
+
 function setSyncStatus(status) {
   syncStatus = status;
   const label = document.getElementById('syncLabel');
   const map = { 'no-url': t('syncNoUrl'), 'syncing': t('syncSyncing'), 'ok': t('syncOk'), 'error': t('syncError') };
   label.textContent = map[status] || '';
+
+  const style = SYNC_BTN_STYLES[status] || SYNC_BTN_STYLES['no-url'];
+  const btnEl = document.getElementById('syncBtn');
+  const dotEl = document.getElementById('syncDot');
+  const pingEl = document.getElementById('syncDotPing');
+  btnEl.className = 'rounded-full px-4 py-2 text-xs font-bold flex items-center gap-2 shadow-lg transition ' + style.btn;
+  dotEl.className = 'relative inline-flex rounded-full h-2.5 w-2.5 ' + style.dot;
+  pingEl.className = 'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ' + style.ping;
+
   renderSettings();
 }
 
@@ -390,6 +403,16 @@ function plMarkup(v) {
           </div>`;
 }
 
+function liveBadge() {
+  return `<span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold tracking-widest text-white bg-gradient-to-r from-red-600 to-red-500 px-3 py-1.5 rounded-full uppercase shadow-[0_0_14px_rgba(239,68,68,0.65)]">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-200 opacity-80"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+            </span>
+            LIVE
+          </span>`;
+}
+
 function renderDashboard() {
   const el = document.getElementById('panel-dashboard');
   if (!data) { el.innerHTML = emptyNotice(); return; }
@@ -408,7 +431,6 @@ function renderDashboard() {
 
   el.innerHTML = `
     <div class="space-y-6">
-      <!-- Section 1: Hero Fintech Card -->
       <div class="fintech-hero text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden">
         <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
           <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')} ${getCurrentMonthName()}</h2>
@@ -440,7 +462,6 @@ function renderDashboard() {
         </div>
       </div>
 
-      <!-- Section 2: Combined Statements -->
       <div class="glass-card overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-200/60 flex justify-between items-center bg-white/40">
           <h2 class="font-bold text-brand-900 text-base tracking-tight">${t('overallTitle')}</h2>
@@ -457,7 +478,6 @@ function renderDashboard() {
         </div>
       </div>
 
-      <!-- Section 3: Business Assumptions -->
       <div class="glass-card p-6 border-l-4 border-l-brand-600">
         <div class="flex items-center gap-2 mb-1">
           <h3 class="font-bold text-brand-900 text-base">${t('assumpTitle')}</h3>
@@ -618,7 +638,7 @@ function renderLifetime() {
       <div class="glass-card overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-200/60 flex justify-between items-center bg-white/40">
           <h2 class="font-bold text-brand-900 text-sm tracking-wide uppercase">${t('yearTableTitle', curYear)}</h2>
-          <span class="text-[10px] font-extrabold tracking-wider text-slate-600 bg-slate-200/80 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tagViewOnly')}</span>
+          ${liveBadge()}
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-xs text-left table-fixed">
@@ -638,10 +658,7 @@ function renderLifetime() {
       <div class="glass-card overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-200/60 flex justify-between items-center bg-white/40">
           <h2 class="font-bold text-brand-900 text-sm tracking-wide uppercase">${t('yearlySummaryTitle')}</h2>
-          <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold tracking-wider text-emerald-700 bg-emerald-50/90 border border-emerald-300 px-3 py-1 rounded-full uppercase backdrop-blur-md">
-            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Live
-          </span>
+          ${liveBadge()}
         </div>
         <div class="overflow-x-auto max-h-72">
           <table class="w-full text-xs text-left">
@@ -713,7 +730,6 @@ function setLanguage(l) {
   renderAll();
 }
 
-// Initial Kickoff
 applyStaticText();
 renderSettings();
 if (scriptUrl) {
