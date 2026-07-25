@@ -191,6 +191,12 @@
   .signal-bar-2 { animation: signal-bar 0.9s ease-in-out infinite; animation-delay: 0.15s; }
   .signal-bar-3 { animation: signal-bar 0.9s ease-in-out infinite; animation-delay: 0.3s; }
 
+  @keyframes dot-breathe {
+    0%, 100% { box-shadow: 0 0 2px 0px currentColor; opacity: 0.7; }
+    50%      { box-shadow: 0 0 8px 3px currentColor; opacity: 1; }
+  }
+  .status-dot-breathe { animation: dot-breathe 1.8s ease-in-out infinite; }
+
   @keyframes shine-sweep {
     0% { background-position: 200% center; }
     100% { background-position: -200% center; }
@@ -225,10 +231,7 @@
     </div>
     
     <button id="syncBtn" onclick="fetchFromSheet()" class="rounded-full px-4 py-2 text-xs font-bold flex items-center gap-2 shadow-lg transition">
-      <span class="relative flex h-2.5 w-2.5">
-        <span id="syncDotPing" class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"></span>
-        <span id="syncDot" class="relative inline-flex rounded-full h-2.5 w-2.5"></span>
-      </span>
+      <span id="syncDot" class="status-dot-breathe inline-flex rounded-full h-2.5 w-2.5"></span>
       <span id="syncLabel"></span>
     </button>
   </div>
@@ -365,10 +368,10 @@ document.querySelectorAll('.nav-tab').forEach(btn => {
 });
 
 const SYNC_BTN_STYLES = {
-  'syncing': { btn: 'bg-red-700 hover:bg-red-600 border border-red-400/50 text-white shadow-red-950/50', dot: 'bg-red-200', ping: 'bg-red-200' },
-  'error':   { btn: 'bg-red-700 hover:bg-red-600 border border-red-400/50 text-white shadow-red-950/50', dot: 'bg-red-200', ping: 'bg-red-200' },
-  'ok':      { btn: 'bg-emerald-800 hover:bg-emerald-700 border border-emerald-500/40 text-white shadow-emerald-950/50', dot: 'bg-emerald-300', ping: 'bg-emerald-300' },
-  'no-url':  { btn: 'bg-slate-700 hover:bg-slate-600 border border-slate-400/40 text-white shadow-slate-950/50', dot: 'bg-slate-300', ping: 'bg-slate-300' },
+  'syncing': { btn: 'bg-red-700 hover:bg-red-600 border border-red-400/50 text-white shadow-red-950/50', dot: 'bg-red-200 text-red-200' },
+  'error':   { btn: 'bg-red-700 hover:bg-red-600 border border-red-400/50 text-white shadow-red-950/50', dot: 'bg-red-200 text-red-200' },
+  'ok':      { btn: 'bg-emerald-800 hover:bg-emerald-700 border border-emerald-500/40 text-white shadow-emerald-950/50', dot: 'bg-emerald-300 text-emerald-300' },
+  'no-url':  { btn: 'bg-slate-700 hover:bg-slate-600 border border-slate-400/40 text-white shadow-slate-950/50', dot: 'bg-slate-300 text-slate-300' },
 };
 
 function setSyncStatus(status) {
@@ -380,10 +383,8 @@ function setSyncStatus(status) {
   const style = SYNC_BTN_STYLES[status] || SYNC_BTN_STYLES['no-url'];
   const btnEl = document.getElementById('syncBtn');
   const dotEl = document.getElementById('syncDot');
-  const pingEl = document.getElementById('syncDotPing');
   btnEl.className = 'rounded-full px-4 py-2 text-xs font-bold flex items-center gap-2 shadow-lg transition ' + style.btn;
-  dotEl.className = 'relative inline-flex rounded-full h-2.5 w-2.5 ' + style.dot;
-  pingEl.className = 'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ' + style.ping;
+  dotEl.className = 'status-dot-breathe inline-flex rounded-full h-2.5 w-2.5 ' + style.dot;
 
   renderSettings();
 }
