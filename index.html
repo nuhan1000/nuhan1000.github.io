@@ -155,31 +155,19 @@
     scrollbar-width: none;
   }
 
-  @keyframes live-glow {
-    0%, 100% { box-shadow: 0 0 6px rgba(239,68,68,0.55), 0 0 0px rgba(239,68,68,0.35); }
-    50% { box-shadow: 0 0 26px rgba(239,68,68,1), 0 0 14px rgba(248,113,113,0.9); }
-  }
-  .live-badge-glow { animation: live-glow 0.7s ease-in-out infinite; }
+  .live-badge-glow { box-shadow: 0 0 10px rgba(239,68,68,0.5); }
 
   @keyframes fast-ping {
     0% { transform: scale(0.9); opacity: 0.9; }
-    75%, 100% { transform: scale(2.4); opacity: 0; }
+    75%, 100% { transform: scale(2.2); opacity: 0; }
   }
-  .live-fast-ping { animation: fast-ping 0.6s cubic-bezier(0,0,0.2,1) infinite; }
-
-  @keyframes signal-bar {
-    0%, 100% { opacity: 0.35; }
-    50% { opacity: 1; }
-  }
-  .signal-bar-1 { animation: signal-bar 0.9s ease-in-out infinite; animation-delay: 0s; }
-  .signal-bar-2 { animation: signal-bar 0.9s ease-in-out infinite; animation-delay: 0.15s; }
-  .signal-bar-3 { animation: signal-bar 0.9s ease-in-out infinite; animation-delay: 0.3s; }
+  .live-fast-ping { animation: fast-ping 1.2s cubic-bezier(0,0,0.2,1) infinite; }
 
   @keyframes dot-breathe {
-    0%, 100% { box-shadow: 0 0 2px 0px currentColor; opacity: 0.7; }
-    50%      { box-shadow: 0 0 8px 3px currentColor; opacity: 1; }
+    0%, 100% { opacity: 0.6; }
+    50%      { opacity: 1; }
   }
-  .status-dot-breathe { animation: dot-breathe 1.8s ease-in-out infinite; }
+  .status-dot-breathe { box-shadow: 0 0 4px 1px currentColor; animation: dot-breathe 2.6s ease-in-out infinite; }
 
   @keyframes shine-sweep {
     0% { background-position: 200% center; }
@@ -441,9 +429,9 @@ function liveBadge(size) {
             </span>
             LIVE
             <span class="absolute ${iconBox} bg-white text-red-600 rounded-full flex items-end justify-center gap-[1.5px] px-0.5 pb-0.5 shadow-md border border-red-200">
-              <span class="signal-bar-1 w-[2px] h-[3px] bg-red-600 rounded-sm"></span>
-              <span class="signal-bar-2 w-[2px] h-[5px] bg-red-600 rounded-sm"></span>
-              <span class="signal-bar-3 w-[2px] h-[7px] bg-red-600 rounded-sm"></span>
+              <span class="w-[2px] h-[3px] bg-red-600 rounded-sm"></span>
+              <span class="w-[2px] h-[5px] bg-red-600 rounded-sm"></span>
+              <span class="w-[2px] h-[7px] bg-red-600 rounded-sm"></span>
             </span>
           </span>`;
 }
