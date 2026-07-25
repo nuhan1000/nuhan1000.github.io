@@ -220,10 +220,10 @@ const I18N = {
     tabDashboard: 'সারাংশ', tabProduction: 'প্রোডাকশন', tabSingeing: 'সিঙ্গিং', tabLifetime: 'লাইফটাইম', tabSettings: 'সেটিংস',
     syncNoUrl: 'শীট লিংক সেট করুন', syncSyncing: 'সিঙ্ক হচ্ছে...', syncOk: 'অনলাইন সিঙ্কড', syncError: 'সিঙ্ক ব্যর্থ',
     emptyNotice: 'শীটের সাথে এখনো সিঙ্ক হয়নি। "সেটিংস" ট্যাবে গিয়ে Google Apps Script লিংকটি দিন।',
-    prodCardTitle: 'প্রোডাকশন প্রফিট — চলতি মাস', tag24_4_2: '২৪ / ৪ / ২ মেশিন',
+    prodCardTitle: 'প্রোডাকশন প্রফিট —', tag24_4_2: '২৪ / ৪ / ২ মেশিন',
     label24: '২৪ মেশিন (ফ্যাক্টরি টোটাল)', label4: '৪ মেশিন (আমার ভাগ)', label2: '২ মেশিন',
     overallTitle: 'সামগ্রিক আয় ও লাভ-ক্ষতি বিবরণী', tagCombined: 'কম্বাইন্ড ব্যালেন্স',
-    labelSingeingIncome: 'সিঙ্গিং ইনকাম (চলতি মাস)', labelCombinedIncome: 'কম্বাইন্ড ইনকাম (৪+২+সিঙ্গিং)',
+    labelSingeingIncome: (m) => 'সিঙ্গিং ইনকাম (' + m + ')', labelCombinedIncome: 'কম্বাইন্ড ইনকাম (৪+২+সিঙ্গিং)',
     labelYearPL: (y) => y + ' সালের লাভ/ক্ষতি', labelLifetimePL: 'লাইফটাইম নেট প্রফিট',
     assumpTitle: 'ব্যবসার মূল প্যারামিটারসমূহ',
     assumpDesc: 'মার্কেট রেট, মেশিন সংখ্যা বা সিঙ্গিং রেট বদলালে এখান থেকে সেভ করুন — সব হিসাব রিক্যালকুলেট হবে।',
@@ -234,7 +234,7 @@ const I18N = {
     statThaan: 'থান:', statTotalProfit: 'টোটাল প্রফিট:', statMyProfit: 'আমার প্রফিট:', stat2Machine: '২ মেশিন:', statCombined: 'কম্বাইন্ড:',
     btnSaveSheet: 'শীটে সেভ করুন',
     payLabel: 'বিল:', singedPlaceholder: 'সিঙড থান', btnSave: 'সেভ',
-    curEntryTitle: (m, y) => m + ' ' + y + ' — এই মাসের স্টেটমেন্ট', tagCurMonth: 'চলতি মাস',
+    curEntryTitle: (m, y) => m + ' ' + y + ' — মাসিক স্টেটমেন্ট', tagCurMonth: '',
     labelInvestment: 'ইনভেস্টমেন্ট (৳)', labelMonthlyIncome: 'মান্থলি ইনকাম (৳)',
     statYearCum: 'এ বছর কিউমুলেটিভ:', statYearPL: 'এ বছর লাভ/ক্ষতি:', statLifetimePL: 'লাইফটাইম লাভ/ক্ষতি:',
     notFoundMonth: (m, y) => m + ' ' + y + ' শীটে খুঁজে পাওয়া যায়নি।',
@@ -257,10 +257,10 @@ const I18N = {
     tabDashboard: 'Summary', tabProduction: 'Production', tabSingeing: 'Singeing', tabLifetime: 'Lifetime', tabSettings: 'Settings',
     syncNoUrl: 'Set sheet link', syncSyncing: 'Syncing...', syncOk: 'Online Synced', syncError: 'Sync failed',
     emptyNotice: 'Not synced with the sheet yet. Go to "Settings" and enter the Apps Script link.',
-    prodCardTitle: 'Production Profit — Current Month', tag24_4_2: '24 / 4 / 2 Machines',
+    prodCardTitle: 'Production Profit —', tag24_4_2: '24 / 4 / 2 Machines',
     label24: '24 Machines (Factory Total)', label4: '4 Machines (My Share)', label2: '2 Machines',
     overallTitle: 'Overall Financial Statement', tagCombined: 'Combined Balance',
-    labelSingeingIncome: 'Singeing Income (This Month)', labelCombinedIncome: 'Combined Income (4+2+Singeing)',
+    labelSingeingIncome: (m) => 'Singeing Income (' + m + ')', labelCombinedIncome: 'Combined Income (4+2+Singeing)',
     labelYearPL: (y) => y + ' Profit/Loss', labelLifetimePL: 'Lifetime Net Profit',
     assumpTitle: 'Core Business Parameters',
     assumpDesc: 'Update market rate, machine count, or singeing rate here — all data will recalculate automatically.',
@@ -271,7 +271,7 @@ const I18N = {
     statThaan: 'Thaan:', statTotalProfit: 'Total Profit:', statMyProfit: 'My Profit:', stat2Machine: '2 Machines:', statCombined: 'Combined:',
     btnSaveSheet: 'Save to Sheet',
     payLabel: 'Pay:', singedPlaceholder: 'Singed Thaan', btnSave: 'Save',
-    curEntryTitle: (m, y) => m + " " + y + " — Monthly Statement", tagCurMonth: 'Current Month',
+    curEntryTitle: (m, y) => m + " " + y + " — Monthly Statement", tagCurMonth: '',
     labelInvestment: 'Investment (৳)', labelMonthlyIncome: 'Monthly Income (৳)',
     statYearCum: 'This Year Cumulative:', statYearPL: 'This Year P/L:', statLifetimePL: 'Lifetime P/L:',
     notFoundMonth: (m, y) => m + ' ' + y + ' not found in the sheet.',
@@ -408,7 +408,7 @@ function renderDashboard() {
       <!-- Section 1: Hero Fintech Card -->
       <div class="fintech-hero text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden">
         <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-          <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')}</h2>
+          <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')} ${getCurrentMonthName()}</h2>
           <span class="text-[10px] font-extrabold tracking-widest text-amber-300 bg-amber-950/80 border border-amber-500/40 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tag24_4_2')}</span>
         </div>
 
@@ -427,7 +427,7 @@ function renderDashboard() {
             <div class="text-2xl font-black text-slate-100 tracking-tight">${fmtBDT(p2)}</div>
           </div>
           <div class="bg-luxuryGold-400/10 backdrop-blur-md border border-luxuryGold-400/30 p-5 rounded-2xl shadow-inner">
-            <div class="text-[11px] font-bold text-luxuryGold-400 uppercase tracking-wider mb-1">${t('labelSingeingIncome')}</div>
+            <div class="text-[11px] font-bold text-luxuryGold-400 uppercase tracking-wider mb-1">${t('labelSingeingIncome', getCurrentMonthName())}</div>
             <div class="text-2xl font-black text-luxuryGold-400 tracking-tight">${fmtBDT(singeingIncome)}</div>
           </div>
           <div class="bg-emerald-500/10 backdrop-blur-md border border-emerald-500/30 p-5 rounded-2xl shadow-inner">
@@ -443,15 +443,7 @@ function renderDashboard() {
           <h2 class="font-bold text-brand-900 text-base tracking-tight">${t('overallTitle')}</h2>
           <span class="text-[10px] font-extrabold tracking-wider text-amber-800 bg-amber-100/80 border border-amber-300 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tagCombined')}</span>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200/60">
-          <div class="p-6">
-            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">${t('labelSingeingIncome')}</div>
-            <div class="text-xl font-black text-luxuryGold-600">${fmtBDT(singeingIncome)}</div>
-          </div>
-          <div class="p-6">
-            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">${t('labelCombinedIncome')}</div>
-            <div class="text-xl font-black text-finGreen-600">${fmtBDT(combined)}</div>
-          </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-200/60">
           <div class="p-6">
             <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">${t('labelYearPL', yearLabel)}</div>
             <div>${plMarkup(yearPL)}</div>
@@ -555,6 +547,12 @@ async function saveSingeing(i) {
 }
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTH_NAMES_BN = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+
+function getCurrentMonthName() {
+  const idx = new Date().getMonth();
+  return lang === 'bn' ? MONTH_NAMES_BN[idx] : MONTH_NAMES[idx];
+}
 
 function renderLifetime() {
   const el = document.getElementById('panel-lifetime');
@@ -570,7 +568,7 @@ function renderLifetime() {
     <div class="glass-card overflow-hidden mb-6 border-2 border-brand-600/30">
       <div class="px-6 py-4 border-b border-slate-200/60 flex justify-between items-center bg-white/40">
         <h2 class="font-bold text-brand-900 text-base">${t('curEntryTitle', cur.month, cur.year)}</h2>
-        <span class="text-[10px] font-extrabold tracking-wider text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tagCurMonth')}</span>
+        <span class="text-[10px] font-extrabold tracking-wider text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-3 py-1 rounded-full uppercase backdrop-blur-md">${getCurrentMonthName()}</span>
       </div>
       <div class="p-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
