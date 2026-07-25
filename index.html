@@ -408,7 +408,7 @@ function renderDashboard() {
       <!-- Section 1: Hero Fintech Card -->
       <div class="fintech-hero text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden">
         <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-          <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')} ${getCurrentMonthName()}</h2>
+          <h2 class="font-serif font-bold text-slate-100 text-lg sm:text-xl tracking-wide">${t('prodCardTitle')} ${monthWithPulse()}</h2>
           <span class="text-[10px] font-extrabold tracking-widest text-amber-300 bg-amber-950/80 border border-amber-500/40 px-3 py-1 rounded-full uppercase backdrop-blur-md">${t('tag24_4_2')}</span>
         </div>
 
@@ -427,7 +427,7 @@ function renderDashboard() {
             <div class="text-2xl font-black text-slate-100 tracking-tight">${fmtBDT(p2)}</div>
           </div>
           <div class="bg-luxuryGold-400/10 backdrop-blur-md border border-luxuryGold-400/30 p-5 rounded-2xl shadow-inner">
-            <div class="text-[11px] font-bold text-luxuryGold-400 uppercase tracking-wider mb-1">${t('labelSingeingIncome', getCurrentMonthName())}</div>
+            <div class="text-[11px] font-bold text-luxuryGold-400 uppercase tracking-wider mb-1">${t('labelSingeingIncome', monthWithPulse())}</div>
             <div class="text-2xl font-black text-luxuryGold-400 tracking-tight">${fmtBDT(singeingIncome)}</div>
           </div>
           <div class="bg-emerald-500/10 backdrop-blur-md border border-emerald-500/30 p-5 rounded-2xl shadow-inner">
@@ -553,6 +553,10 @@ function getCurrentMonthName() {
   return lang === 'bn' ? MONTH_NAMES_BN[idx] : MONTH_NAMES[idx];
 }
 
+function monthWithPulse() {
+  return getCurrentMonthName() + ' <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse align-middle ml-1"></span>';
+}
+
 function renderLifetime() {
   const el = document.getElementById('panel-lifetime');
   if (!data) { el.innerHTML = emptyNotice(); return; }
@@ -567,7 +571,7 @@ function renderLifetime() {
     <div class="glass-card overflow-hidden mb-6 border-2 border-brand-600/30">
       <div class="px-6 py-4 border-b border-slate-200/60 flex justify-between items-center bg-white/40">
         <h2 class="font-bold text-brand-900 text-base">${t('curEntryTitle', cur.month, cur.year)}</h2>
-        <span class="text-[10px] font-extrabold tracking-wider text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-3 py-1 rounded-full uppercase backdrop-blur-md">${getCurrentMonthName()}</span>
+        <span class="text-[10px] font-extrabold tracking-wider text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-3 py-1 rounded-full uppercase backdrop-blur-md">${monthWithPulse()}</span>
       </div>
       <div class="p-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
