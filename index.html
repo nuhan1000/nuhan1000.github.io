@@ -170,6 +170,26 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  @keyframes live-glow {
+    0%, 100% { box-shadow: 0 0 6px rgba(239,68,68,0.55), 0 0 0px rgba(239,68,68,0.35); }
+    50% { box-shadow: 0 0 26px rgba(239,68,68,1), 0 0 14px rgba(248,113,113,0.9); }
+  }
+  .live-badge-glow { animation: live-glow 0.7s ease-in-out infinite; }
+
+  @keyframes fast-ping {
+    0% { transform: scale(0.9); opacity: 0.9; }
+    75%, 100% { transform: scale(2.4); opacity: 0; }
+  }
+  .live-fast-ping { animation: fast-ping 0.6s cubic-bezier(0,0,0.2,1) infinite; }
+
+  @keyframes signal-bar {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 1; }
+  }
+  .signal-bar-1 { animation: signal-bar 0.9s ease-in-out infinite; animation-delay: 0s; }
+  .signal-bar-2 { animation: signal-bar 0.9s ease-in-out infinite; animation-delay: 0.15s; }
+  .signal-bar-3 { animation: signal-bar 0.9s ease-in-out infinite; animation-delay: 0.3s; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans">
@@ -404,12 +424,17 @@ function plMarkup(v) {
 }
 
 function liveBadge() {
-  return `<span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold tracking-widest text-white bg-gradient-to-r from-red-600 to-red-500 px-3 py-1.5 rounded-full uppercase shadow-[0_0_14px_rgba(239,68,68,0.65)]">
+  return `<span class="relative inline-flex items-center gap-1.5 text-[10px] font-extrabold tracking-widest text-white bg-gradient-to-r from-red-600 to-red-500 px-3 py-1.5 rounded-full uppercase live-badge-glow">
             <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-200 opacity-80"></span>
+              <span class="live-fast-ping absolute inline-flex h-full w-full rounded-full bg-red-200 opacity-90"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
             </span>
             LIVE
+            <span class="absolute -top-2 -right-2 bg-white text-red-600 rounded-full w-4 h-4 flex items-end justify-center gap-[1.5px] px-0.5 pb-0.5 shadow-md border border-red-200">
+              <span class="signal-bar-1 w-[2px] h-[3px] bg-red-600 rounded-sm"></span>
+              <span class="signal-bar-2 w-[2px] h-[5px] bg-red-600 rounded-sm"></span>
+              <span class="signal-bar-3 w-[2px] h-[7px] bg-red-600 rounded-sm"></span>
+            </span>
           </span>`;
 }
 
