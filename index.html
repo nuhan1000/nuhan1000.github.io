@@ -2,9 +2,14 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>ইসলাম উইভিং ফ্যাক্টরি — এক্সিকিউটিভ হিসাব খাতা</title>
 <link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#0b1329" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Islam Weaving" />
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -298,11 +303,7 @@ function t(key, ...args) {
 
 let scriptUrl = localStorage.getItem('appsScriptUrl') || '';
 let data = null;
-try {
-  const cachedData = localStorage.getItem('cachedSheetData');
-  if (cachedData) data = JSON.parse(cachedData);
-} catch (e) { data = null; }
-let syncStatus = data ? 'ok' : 'no-url';
+let syncStatus = 'no-url';
 
 function fmtBDT(n) {
   const v = Number(n) || 0;
@@ -343,7 +344,6 @@ async function fetchFromSheet() {
     const r = await fetch(scriptUrl);
     const json = await r.json();
     data = json;
-    try { localStorage.setItem('cachedSheetData', JSON.stringify(json)); } catch (e) {}
     setSyncStatus('ok');
     renderAll();
   } catch (e) {
@@ -714,14 +714,10 @@ function setLanguage(l) {
 
 // Initial Kickoff
 applyStaticText();
-if (data) {
-  renderAll();
-} else {
-  renderSettings();
-}
+renderSettings();
 if (scriptUrl) {
   fetchFromSheet();
-} else if (!data) {
+} else {
   renderAll();
 }
 </script>
